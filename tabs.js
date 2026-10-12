@@ -1,0 +1,5 @@
+const toolTabs=[...document.querySelectorAll('[role="tab"]')];
+function selectTool(id,focus=false){const selected=document.getElementById(id)||toolTabs[0];for(const tab of toolTabs){const active=tab===selected;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;document.getElementById(tab.getAttribute('aria-controls')).hidden=!active;}if(focus)selected.focus();history.replaceState(null,'',selected.id==='march-tab'?'#march-command':'#reinforcement');}
+for(const [index,tab] of toolTabs.entries()){tab.addEventListener('click',()=>selectTool(tab.id));tab.addEventListener('keydown',event=>{let target;if(event.key==='ArrowRight'||event.key==='ArrowLeft')target=toolTabs[(index+1)%toolTabs.length];if(event.key==='Home')target=toolTabs[0];if(event.key==='End')target=toolTabs.at(-1);if(target){event.preventDefault();selectTool(target.id,true);}});}
+function selectHash(){selectTool(location.hash==='#march-command'?'march-tab':'reinforcement-tab');}
+window.addEventListener('hashchange',selectHash);selectHash();
