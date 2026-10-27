@@ -1,0 +1,1492 @@
+<!doctype html>
+<html lang="en" data-edition="normal-all-marches">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<meta name="description" content="Plan Kingshot march times, compare pet bonuses, and choose your position on an interactive world map. Works offline.">
+<title>Kingshot · March planner</title>
+<script>try { const theme=localStorage.getItem('march-theme-normal-all-marches'); if (["light", "dark"].includes(theme)) document.documentElement.dataset.theme=theme; } catch {}</script>
+<style>
+:root{--bg:#f4f3ef;--surface:#fffefa;--surface2:#eeede7;--ink:#202b2a;--muted:#626d68;--line:#d7dad2;--accent:#a24427;--accent-bg:#f6eee5;--pet:#167265;--pet-bg:#e7f2ec;--danger:#a12d32;--input:#fffefa;--focus:#216da0;--shadow:0 8px 22px #1b282308;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111a1a;--surface:#182323;--surface2:#1f2e2d;--ink:#eef1e9;--muted:#a9b8b1;--line:#354642;--accent:#eea681;--accent-bg:#302b24;--pet:#80d8bc;--pet-bg:#203b33;--danger:#ffaaaa;--input:#14201f;--focus:#8acafa;--shadow:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111a1a;--surface:#182323;--surface2:#1f2e2d;--ink:#eef1e9;--muted:#a9b8b1;--line:#354642;--accent:#eea681;--accent-bg:#302b24;--pet:#80d8bc;--pet-bg:#203b33;--danger:#ffaaaa;--input:#14201f;--focus:#8acafa;--shadow:none;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button,summary,select{cursor:pointer}button{color:inherit}button:disabled{cursor:default;opacity:.45}a{color:inherit}input,select,textarea{width:100%;min-width:0;background:var(--input);border:1px solid var(--line);color:var(--ink);border-radius:5px;padding:10px 11px;min-height:44px}input{font:16px/1.35 var(--mono);font-variant-numeric:tabular-nums}input::placeholder{color:var(--muted);opacity:.75}input:focus,select:focus{border-color:var(--focus)}:focus-visible{outline:2px solid var(--focus);outline-offset:3px}input[aria-invalid="true"],select[aria-invalid="true"]{border-color:var(--danger)}[hidden]{display:none!important}svg{display:block}h1,h2,h3,p{margin:0}h2{font-size:15px;font-weight:650;letter-spacing:-.2px}h3{font-size:15px;margin-bottom:12px}button{touch-action:manipulation}.app{max-width:1260px;margin:auto;padding:0 32px}.masthead{height:84px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.wordmark{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:13px;font-weight:800;letter-spacing:1.5px}.wordmark svg{width:29px;height:29px;color:var(--accent)}.wordmark-sub{display:inline-block;border-left:1px solid var(--line);margin-left:12px;padding-left:14px;font-size:10px;font-weight:550;letter-spacing:1.7px;color:var(--muted)}.header-tools{display:flex;align-items:center;gap:22px}.offline{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.offline>span{width:6px;height:6px;border-radius:50%;background:var(--pet)}.icon-button{width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:transparent;display:grid;place-items:center}.icon-button svg{width:20px;height:20px}.icon-button .sun{display:none}.is-dark .icon-button .sun{display:block}.is-dark .icon-button .moon{display:none}.intro{padding:35px 0 30px;display:flex;justify-content:space-between;gap:20px;align-items:center}.eyebrow{font-size:10px;font-weight:750;letter-spacing:1.8px;color:var(--muted);margin-bottom:8px}h1{font-size:clamp(28px,3.3vw,42px);font-weight:650;letter-spacing:-1.5px;line-height:1.18}h1>span{color:var(--accent)}.intro p{margin-top:10px;color:var(--muted)}.intro-meta{display:grid;gap:7px;text-align:right;font-size:12px;color:var(--muted)}.edition{font-size:10px;font-weight:700;letter-spacing:1.1px;color:var(--accent)}.workspace{display:grid;grid-template-columns:310px minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}.controls{border-right:1px solid var(--line)}.control-section{padding:24px;border-bottom:1px solid var(--line)}.control-section:last-child{border:0}.control-section h2{display:flex;align-items:center;gap:8px;margin-bottom:18px}.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:6px}.step{font:10px var(--mono);color:var(--accent);letter-spacing:-.3px}.text-button{border:0;background:transparent;color:var(--accent);font-size:11px;font-weight:650;padding:9px 0;min-height:40px;white-space:nowrap}.text-button:hover{text-decoration:underline}.field{min-width:0}.field-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field label{display:block;font-size:12px;font-weight:600;margin:0 0 7px}.hint{color:var(--muted);font-size:11px;line-height:1.65;margin-top:9px}.coordinate-readout{margin-top:14px;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;gap:10px}.coordinate-readout span{font-family:var(--mono);color:var(--ink);overflow-wrap:anywhere;text-align:right}.input-affix{position:relative}.input-affix input{padding-right:33px}.input-affix>span{position:absolute;right:13px;top:11px;color:var(--muted);font-family:var(--mono);pointer-events:none}.field-error{display:block;font-size:11px;color:var(--danger);margin-top:5px;line-height:1.5}.field-error:empty{display:none}.base-field{margin-top:19px}.label-note{float:right;font-weight:400;color:var(--muted);font-size:10px}.pet-setting{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}.toggle-label{display:flex;position:relative;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;min-height:38px}.toggle-label strong{display:block;font-size:13px;font-weight:650}.toggle-label small{color:var(--muted);font-size:11px}.toggle-label input{position:absolute;right:0;width:40px;height:24px;min-height:0;opacity:0;margin:0}.switch{flex:none;display:block;width:38px;height:22px;border-radius:20px;background:var(--muted);padding:3px}.switch:after{content:"";display:block;width:16px;height:16px;border-radius:100%;background:var(--surface)}.toggle-label input:checked+.switch{background:var(--pet)}.toggle-label input:checked+.switch:after{transform:translateX(16px)}.toggle-label input:focus-visible+.switch{outline:2px solid var(--focus);outline-offset:4px}#pet-fields{padding-top:16px}.optional{margin-left:auto;color:var(--muted);font-size:8px;letter-spacing:.8px}.custom-section>.field{margin-top:14px}.results{min-width:0;padding:27px 28px 24px}.results-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.results-top .eyebrow{font-size:9px;margin-bottom:6px}.results-top h2{font-size:24px;letter-spacing:-.6px}.button{border:1px solid var(--line);background:var(--surface);border-radius:5px;font-size:11px;font-weight:600;padding:9px 12px;min-height:38px;display:inline-flex;align-items:center;justify-content:center;gap:7px}.button:not(:disabled):hover,.icon-button:hover{background:var(--surface2)}.button svg{width:16px;height:16px}.result-status{display:flex;align-items:center;gap:8px;background:var(--surface2);padding:10px 12px;border-radius:4px;margin-top:23px;color:var(--muted);font-size:11px;min-height:38px}.status-dot{width:5px;height:5px;border-radius:50%;background:var(--muted);flex:none}.result-status.ready .status-dot{background:var(--pet)}.time-key{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:20px 0 12px;font-size:10px;color:var(--muted)}.time-key>span:first-child{display:flex;align-items:center;gap:6px}.key-mark{height:6px;width:6px;background:var(--ink);display:inline-block}table{width:100%;border-collapse:collapse;table-layout:fixed}th{color:var(--muted);font-size:9px;font-weight:650;letter-spacing:1px;text-align:right;padding:13px 12px;border-bottom:1px solid var(--line)}th:first-child{text-align:left;padding-left:0;width:33%}th:last-child{padding-right:0}th.pet-column{color:var(--pet)}#pet-header-state{display:inline-block;font:8px var(--mono);margin-left:4px;color:var(--muted)}td{border-bottom:1px solid var(--line);padding:18px 12px;vertical-align:top;text-align:right;min-width:0}td:first-child{padding-left:0;text-align:left}td:last-child{padding-right:0}tr.castle td{background:var(--accent-bg)}tr.castle td:first-child{padding-left:12px;border-radius:5px 0 0 0;border-left:2px solid var(--accent)}tr.castle td:last-child{padding-right:10px;border-radius:0 5px 0 0}.target-name{font-weight:650;font-size:13px;margin-top:2px;line-height:1.4;overflow-wrap:anywhere}.native-name{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:2px}.target-coords{font:10px/1.5 var(--mono);color:var(--muted);margin-top:7px;overflow-wrap:anywhere}.time-value{font:500 30px/1.1 var(--mono);letter-spacing:-1.6px;overflow-wrap:anywhere}.time-value .unit{font-size:12px;letter-spacing:0;margin-left:3px;color:var(--muted)}.pet-cell .time-value{color:var(--pet)}.duration{font:10px/1.4 var(--mono);color:var(--muted);margin:6px 0}.raw{font:9px/1.6 var(--mono);color:var(--muted);overflow-wrap:anywhere;word-break:normal}.raw .raw-label{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:9px;letter-spacing:.1px}.empty-value{font:24px/1.2 var(--mono);color:var(--line)}.cell-note{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5}.cell-error{font-size:11px;line-height:1.5;color:var(--muted)}.result-foot{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted);padding:14px 0 20px}details{border-top:1px solid var(--line)}summary{list-style:none;padding:17px 0;display:flex;align-items:center;gap:12px;font-size:12px;font-weight:650;min-height:48px}summary::-webkit-details-marker{display:none}summary:after{content:"+";font:18px var(--mono);color:var(--muted);margin-left:2px}details[open]>summary:after{content:"−"}.summary-note{color:var(--muted);font-size:10px;font-weight:400;margin-left:auto;text-align:right}.details-content{padding:0 0 20px}.details-content p{color:var(--muted);font-size:12px;line-height:1.7;margin-bottom:12px}.route-details .field{max-width:260px;margin-bottom:16px}#route-content{font-size:11px;color:var(--muted)}.route-endpoints{font:11px var(--mono);margin:14px 0;overflow-wrap:anywhere}.segment-list{display:grid;gap:9px;margin:14px 0}.segment{border-left:2px solid var(--line);padding:4px 0 4px 10px;display:grid;gap:4px;overflow-wrap:anywhere}.segment strong{color:var(--ink);font-size:11px}.segment code{font-size:10px;font-family:var(--mono)}.model-note{font-size:11px;line-height:1.75;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}.model-note strong{font-weight:600;color:var(--ink)}.model-note em{font-style:normal}.support{margin-top:24px;border-bottom:1px solid var(--line)}.support details:first-child{border-top:0}.support summary{padding:18px 0;font-size:13px}.support .details-content{padding:2px 0 24px}.preset-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;margin:18px 0}.preset-block{min-width:0}.preset-block h3{font-size:12px;margin-bottom:12px}.preset-block .field-pair{gap:7px}.preset-block input{font-size:13px;padding:8px}.preset-block .field label{font-size:10px}.preset-block .alias-field{margin-top:10px}.preset-block select{font-size:11px;padding:8px}.preset-block .preset-center{font-size:10px;margin:8px 0 0;overflow-wrap:anywhere}.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}.formula{font-family:var(--mono);background:var(--surface2);border-left:2px solid var(--accent);padding:14px;font-size:11px!important;overflow-wrap:anywhere}footer{display:flex;justify-content:space-between;gap:15px;color:var(--muted);font-size:10px;padding:25px 0 30px}footer>span:first-child{font-weight:650;font-size:9px;letter-spacing:1.1px}.footer-slash{padding:0 7px;color:var(--accent)}.notice{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);max-width:calc(100% - 28px);background:var(--ink);color:var(--surface);font-size:12px;padding:12px 18px;border-radius:6px;box-shadow:0 6px 24px #0002;z-index:3;pointer-events:none}.notice:empty{display:none}#copy-fallback{margin-top:22px}#copy-fallback label{display:block;margin-bottom:8px}#copy-text{font-family:var(--mono);font-size:12px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.no-script{padding:20px;color:var(--danger)}
+@media(min-width:1100px){.results{padding-left:36px;padding-right:36px}td{padding-top:19px;padding-bottom:19px}.time-value{font-size:33px}}
+@media(max-width:900px){.app{padding:0 22px}.workspace{grid-template-columns:280px minmax(0,1fr)}.control-section{padding:20px}.results{padding:23px 20px}.results-top h2{font-size:21px}.time-value{font-size:26px}.results-top .button{padding:8px;font-size:10px}.time-key{font-size:9px}.preset-grid{grid-template-columns:repeat(3,minmax(0,1fr))}td,th{padding-left:8px;padding-right:8px}.intro-meta{display:none}}
+@media(max-width:740px){.app{padding:0 18px}.masthead{height:68px}.wordmark-sub{font-size:8px;margin-left:8px;padding-left:9px}.header-tools{gap:12px}.offline{display:none}.intro{padding:26px 0 22px}.intro p{font-size:12px}.workspace{grid-template-columns:1fr}.controls{border-right:0;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}.control-section{padding:20px}.control-section:first-child{border-right:1px solid var(--line)}.control-section:nth-child(2){grid-row:span 2;border-bottom:0}.custom-section{border-right:1px solid var(--line)!important}.results{padding:24px}.results-top h2{font-size:24px}.time-value{font-size:31px}.time-key{font-size:10px}.notes-grid{gap:24px}.model-note{font-size:11px}.result-foot{padding-bottom:16px}}
+@media(max-width:510px){.app{padding:0 12px}.wordmark{font-size:11px;letter-spacing:1px}.wordmark-sub{display:none}.intro{padding-top:24px}.eyebrow{font-size:9px}h1{font-size:29px;letter-spacing:-1px}.controls{display:block}.control-section{padding:20px;border-right:0!important}.control-section:nth-child(2){border-bottom:1px solid var(--line)}.control-section h2{font-size:14px}.custom-section{border-right:0!important}.results{padding:23px 14px 20px}.results-top h2{font-size:23px}.results-top .button{font-size:10px;padding:8px}.results-top .eyebrow{font-size:8px}.time-key{font-size:9px;align-items:flex-start;flex-direction:column;gap:4px;margin-top:15px}.result-status{margin-top:18px}.time-value{font-size:26px;letter-spacing:-1.2px}.target-name{font-size:11px}.target-coords{font-size:9px}.native-name{font-size:9px}.raw{font-size:9px}.duration{font-size:9px}th{font-size:8px;letter-spacing:.5px;padding:12px 5px}th:first-child{width:33%}td{padding:18px 5px}tr.castle td:first-child{padding-left:7px}tr.castle td:last-child{padding-right:6px}.pet-column #pet-header-state{display:block;margin-left:0;margin-top:2px}.time-value .unit{font-size:10px;margin-left:2px}.summary-note{font-size:9px;max-width:48%}.support summary{font-size:12px}.preset-grid{grid-template-columns:1fr 1fr;gap:20px 16px}.notes-grid{grid-template-columns:1fr;gap:12px}footer{flex-direction:column;gap:6px}.result-foot{font-size:9px}.cell-note{font-size:9px}.label-note{font-size:10px}}
+.raw{margin-top:8px;font-size:11px}.raw .raw-label{font-size:10px}.time-value .unit{margin-left:5px}.toggle-label{min-height:44px}.icon-button{width:44px;height:44px}
+@media(min-width:741px){.control-section{padding-top:20px;padding-bottom:20px}.control-section h2{margin-bottom:13px}.base-field{margin-top:15px}.pet-setting{margin-top:17px;padding-top:13px}.hint{line-height:1.55}.coordinate-readout{margin-top:10px}#pet-fields{padding-top:11px}}
+@media(max-width:510px){.raw{font-size:10px;line-height:1.6}.raw .raw-label{font-size:9px}.control-section{padding-top:17px;padding-bottom:17px}.control-section h2{margin-bottom:12px}.hint{margin-top:7px;line-height:1.55}.base-field{margin-top:15px}.pet-setting{margin-top:16px;padding-top:12px}.time-value .unit{margin-left:3px}}
+:root{--control-line:#86958d}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--control-line:#667e73}}
+:root[data-theme="dark"]{--control-line:#667e73}
+input,select,textarea,.button,.icon-button{border-color:var(--control-line)}input::placeholder{opacity:1}.mobile-jump{display:none;color:var(--accent);font-size:12px;font-weight:600;padding:12px 0 0;min-height:44px}
+@media(max-width:740px){.mobile-jump{display:inline-flex;gap:8px;align-items:center}.raw .raw-label{display:block}}
+@media(prefers-reduced-motion:no-preference){.switch:after{transition:transform .15s}}
+
+/* The third choice reveals the portrait; the normal themes retain their compact intro. */
+.theme-picker{display:flex;gap:2px;padding:3px;border:1px solid var(--control-line);border-radius:7px;background:var(--surface);flex:none}
+.theme-picker button{border:0;border-radius:4px;background:transparent;color:var(--muted);min-height:36px;min-width:51px;padding:8px 10px;font-size:11px;font-weight:650}
+.theme-picker button:hover{background:var(--surface2);color:var(--ink)}
+.theme-picker button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.theme-picker button:focus-visible{outline-offset:1px}
+
+@media(max-width:900px){footer{flex-wrap:wrap}.header-tools{gap:14px}}
+@media(max-width:510px){.theme-picker button{min-width:46px;padding:8px;font-size:10px}.masthead{gap:8px}.header-tools{gap:0}}
+
+
+.display-controls{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:16px;flex-wrap:wrap}
+.display-controls>span{font-size:11px;color:var(--muted)}
+.format-picker{display:flex;gap:2px;padding:3px;border:1px solid var(--control-line);border-radius:6px;background:var(--surface)}
+.format-picker button{border:0;border-radius:3px;background:transparent;color:var(--muted);min-height:36px;padding:8px 12px;font-size:11px;font-weight:600;white-space:nowrap}
+.format-picker button:hover{background:var(--surface2);color:var(--ink)}
+.format-picker button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.format-picker button:focus-visible{outline-offset:1px}
+.display-controls+.time-key{margin-top:14px}
+@media(max-width:510px){.display-controls{justify-content:space-between;gap:6px}.format-picker button{padding:8px 10px;font-size:10px}.result-foot #time-format-note{text-align:right;max-width:55%}[data-display-format="minutes-seconds"] .time-value{font-size:24px;letter-spacing:-1.2px}}
+
+
+
+/* Map edition: a compact plotting surface using the existing theme tokens. */
+.map-panel{--map-zone:#eee7d2;--map-zone-edge:#8d7340;--map-grid:#b8c2b6;--map-bg:#edf2e9;--map-route:#326d60;--map-slow:#966522;--map-label:#fafaf5;margin:18px 0 24px;padding:18px;border:1px solid var(--line);border-radius:7px;background:var(--surface);min-width:0}
+.is-dark .map-panel{--map-zone:#343628;--map-zone-edge:#bba16b;--map-grid:#4d6258;--map-bg:#14201f;--map-route:#8ac7b2;--map-slow:#efbd78;--map-label:#172421}
+[data-theme="mike"] .map-panel{--map-zone:#242c38;--map-zone-edge:#839cab;--map-grid:#3c5068;--map-bg:#0b111c;--map-route:#66dffe;--map-slow:#e3ba8e;--map-label:#101521}
+[data-theme="furion"] .map-panel{--map-zone:#303821;--map-zone-edge:#a6a468;--map-grid:#405942;--map-bg:#0d1912;--map-route:#79d7c3;--map-slow:#d8c48b;--map-label:#121f18}
+.map-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}.map-heading .eyebrow{font-size:8px;letter-spacing:1.3px;margin-bottom:5px}.map-heading h3{font-size:16px;font-weight:650;letter-spacing:-.3px;margin:0}.map-badge{font:8px var(--mono);letter-spacing:.8px;color:var(--muted);white-space:nowrap}
+.map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;flex-wrap:wrap}.map-modes,.map-zoom{display:flex;gap:3px}.map-modes{padding:3px;border:1px solid var(--control-line);border-radius:5px}.map-panel button{font-size:11px;font-weight:600;background:var(--surface);color:var(--muted);border:1px solid var(--control-line);border-radius:4px;min-height:40px;padding:8px 11px}.map-modes button{border:0;min-height:34px;padding:7px 12px}.map-panel button:hover{color:var(--ink);background:var(--surface2)}.map-panel button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}.map-zoom button{font:22px/1 var(--mono);width:40px;padding:4px}.map-panel button:focus-visible{outline-offset:2px}
+.map-viewport{position:relative;border:1px solid var(--control-line);border-radius:5px;overflow:hidden;background:var(--map-bg)}#march-map-svg{display:block;width:100%;height:auto;aspect-ratio:8/5;touch-action:none;user-select:none;cursor:crosshair;color:var(--ink)}#march-map-svg:focus-visible{outline-offset:-4px}#march-map-svg[data-map-mode="pan"]{cursor:grab}#march-map-svg.is-dragging{cursor:grabbing}.map-readout{position:relative;display:flex;justify-content:space-between;gap:8px;background:var(--map-label);border-top:1px solid var(--line);padding:5px 9px;font:9px/1.4 var(--mono);color:var(--muted);pointer-events:none;opacity:.96}.map-readout span{overflow-wrap:anywhere}
+.map-grid-line{stroke:var(--map-grid);stroke-width:.7;opacity:.48;vector-effect:non-scaling-stroke}.map-grid-major{stroke-width:1;opacity:.75}.map-zone-central{fill:var(--map-zone);stroke:var(--map-zone-edge);stroke-width:1.5;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}.map-zone-hatch{stroke:var(--map-zone-edge);stroke-width:.5;opacity:.14}.map-zone-label{fill:var(--ink);font-family:var(--mono);font-weight:600;letter-spacing:.7px;paint-order:stroke;stroke:var(--map-zone);stroke-width:5;stroke-linejoin:round;pointer-events:none}.map-route-normal,.map-route-slow{fill:none;stroke-width:3;vector-effect:non-scaling-stroke;stroke-linecap:round;pointer-events:none}.map-route-normal{stroke:var(--map-route)}.map-route-slow{stroke:var(--map-slow);stroke-dasharray:7 4}.map-route-node{fill:var(--surface);stroke:var(--map-slow);stroke-width:1.5;vector-effect:non-scaling-stroke;pointer-events:none}.map-marker{cursor:pointer;outline:none}.map-marker[data-kind="town"],.map-marker[data-kind="custom"]{cursor:grab}.map-marker-dot{fill:var(--ink);stroke:var(--surface);stroke-width:2;vector-effect:non-scaling-stroke}.map-marker[data-kind="town"] .map-marker-dot{fill:var(--accent)}.map-marker[data-kind="custom"] .map-marker-dot{fill:var(--pet)}.map-marker[data-kind="castle"] .map-marker-dot{fill:var(--accent)}.map-marker-halo{fill:none;stroke:var(--ink);stroke-width:1.5;vector-effect:non-scaling-stroke;opacity:.4}.map-marker.is-selected .map-marker-halo,.map-marker:focus-visible .map-marker-halo{stroke:var(--focus);stroke-width:3;opacity:1}.map-marker:focus-visible .map-marker-dot{stroke:var(--focus);stroke-width:3}.map-marker.is-overlap .map-marker-halo{stroke-dasharray:3 3}.map-marker-label,.map-marker-time{fill:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:600;paint-order:stroke;stroke:var(--map-label);stroke-width:4;stroke-linejoin:round;pointer-events:none}.map-marker-time{font-family:var(--mono);font-weight:400;fill:var(--muted)}.map-cursor-line{stroke:var(--focus);stroke-width:1.5;stroke-dasharray:3 3;vector-effect:non-scaling-stroke;pointer-events:none}.map-cursor-dot{fill:var(--surface);stroke:var(--focus);stroke-width:2;vector-effect:non-scaling-stroke;pointer-events:none}
+.map-view-controls{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.map-view-controls button{background:transparent;border-color:var(--line);font-size:10px;padding:7px 10px;min-height:36px}.map-legend{display:flex;align-items:center;gap:7px 15px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin:13px 0 10px}.map-legend>span{display:inline-flex;align-items:center;gap:6px}.map-swatch{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--map-bg);border:1px solid var(--map-grid);flex:none}.map-swatch.slow{background:var(--map-zone);border-color:var(--map-zone-edge)}.map-swatch.town{border-radius:50%;background:var(--accent);border-color:var(--accent)}.map-swatch.custom{background:var(--pet);border-color:var(--pet);transform:rotate(45deg);width:8px;height:8px}.map-help,.map-coordinate-note,.map-status{font-size:11px;line-height:1.55;color:var(--muted)}.map-coordinate-note{font-size:10px;margin-top:4px}.map-status{margin-top:10px;font-size:10px;min-height:16px}.map-selection{margin-top:14px;padding:13px 0 12px;border-top:1px solid var(--line);font-size:12px;line-height:1.65;overflow-wrap:anywhere}.map-selection strong{color:var(--ink)}.map-selection span{font-variant-numeric:tabular-nums}.map-selection p{margin:3px 0 0;color:var(--muted);font-size:11px}.map-targets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.map-panel .map-target-button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:9px 10px;gap:4px;min-height:61px;min-width:0;overflow-wrap:anywhere}.map-target-name{font-size:11px;font-weight:650}.map-target-time{font:11px/1.55 var(--mono)}.map-target-state{font-size:10px;font-weight:400}.map-panel .map-target-button[aria-pressed="true"]{background:var(--accent-bg);color:var(--ink);border-color:var(--accent)}.map-panel .map-target-button:disabled{opacity:.75}.map-target-button .pet-time{color:var(--pet)}
+@media(max-width:1100px) and (min-width:741px){.map-panel{padding:13px}.map-badge{display:none}.map-modes button{padding:7px 8px}.map-targets{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:510px){.map-panel{padding:11px;margin-top:15px;margin-left:-4px;margin-right:-4px}.map-heading h3{font-size:15px}.map-badge{display:none}.map-heading .eyebrow{font-size:8px}.map-toolbar{gap:8px}.map-modes{width:100%;justify-content:space-between}.map-modes button{padding:7px 9px;flex:1;font-size:10px;min-height:36px}.map-zoom{margin-left:auto}.map-toolbar{margin-bottom:8px}.map-readout{font-size:8px;padding:4px 6px}.map-readout span:first-child{max-width:36%}.map-view-controls{gap:4px}.map-view-controls button{padding:7px;font-size:9px;flex:1;min-height:40px}.map-legend{font-size:9px;gap:7px 10px}.map-help{font-size:10px}.map-coordinate-note{font-size:9px}.map-targets{grid-template-columns:repeat(2,minmax(0,1fr))}.map-panel .map-target-button{padding:8px;min-height:67px}.map-target-time{font-size:10px}.map-target-name{font-size:10px}}
+
+.map-marker-icon{color:var(--surface);pointer-events:none}.map-marker-leader{stroke:var(--muted);stroke-width:1;stroke-dasharray:2 2;vector-effect:non-scaling-stroke;pointer-events:none}.map-marker-hit{fill:transparent;stroke:none}
+
+.map-marker-letter{fill:var(--surface);font-family:var(--mono);font-weight:700;pointer-events:none}
+.map-marker-origin{fill:var(--ink);pointer-events:none}#map-cluster-note{margin:0 0 9px}
+.map-tools{display:flex;align-items:center;gap:12px;margin-left:auto}.map-rotation{display:flex;gap:3px}.map-panel .map-rotation button{font-size:11px;min-width:40px;padding:7px 8px;white-space:nowrap}.map-panel #map-reset-rotation{min-width:46px;color:var(--ink);background:var(--surface2);font-family:var(--mono);font-variant-numeric:tabular-nums}#map-angle{display:inline-block;min-width:3ch;text-align:center}
+@media(max-width:510px){.map-tools{width:100%;justify-content:space-between;gap:6px;margin-left:0}.map-tools .map-zoom{margin-left:0}.map-panel .map-rotation button{font-size:10px;padding:7px;min-width:38px}.map-panel #map-reset-rotation{min-width:42px}.map-tools .map-zoom button{width:36px;min-width:36px}}
+
+
+/* Extend the existing field-tool palette and controls; keep all three editions. */
+.march-choice>.field+.field{margin-top:14px}.march-choice{background:var(--accent-bg)}
+.conditional-fields{border-top:1px solid var(--line);margin-top:15px;padding-top:14px}
+.check-label{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:600;min-height:44px;cursor:pointer}
+.check-label input{width:18px;height:18px;min-height:18px;flex:none;accent-color:var(--accent);margin:0}
+#hunting-fields{margin-top:18px}#speed-rule{color:var(--accent)}
+.march-context{padding:11px 13px;border-left:2px solid var(--accent);background:var(--accent-bg);font-size:12px;line-height:1.65;margin:16px 0 4px}
+.march-context:empty{display:none}.march-context strong{font-weight:650}
+.cap-note{font-size:10px;color:var(--accent);margin-top:7px}.custom-section>.field-pair{margin-top:14px}
+#comparison-kind-field{margin:0 0 14px}#base-speed:disabled{opacity:.75;cursor:not-allowed}
+.map-targets:has(>.map-target-button:only-of-type){grid-template-columns:1fr}
+.profile-facts{font:11px/1.7 var(--mono);overflow-wrap:anywhere}
+@media(min-width:511px) and (max-width:740px){
+  .controls{grid-template-columns:1fr 1fr;align-items:start}
+  .controls .control-section{grid-row:auto;border-bottom:1px solid var(--line)}
+  .controls .march-choice{grid-column:1/-1;border-right:0;display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+  .march-choice h2,.march-choice>.hint,.march-choice>.conditional-fields{grid-column:1/-1}
+  .march-choice>.field+.field{margin-top:0}
+  .controls .town-section{grid-column:1;grid-row:2}
+  .controls .speed-section{grid-column:2;grid-row:2 / span 2;border-left:1px solid var(--line)}
+  .controls .custom-section{grid-column:1;grid-row:3;border-right:0!important}
+}
+@media(max-width:510px){.march-context{font-size:11px}.march-choice{padding-top:20px;padding-bottom:20px}}
+
+/* Battle map: true tile footprints, crisp zones, and two discrete terrain speeds. */
+.map-panel{--map-zone:#e9e3d6;--map-zone-edge:#8d7340;--map-grid:#a4b1a0;--map-grid-strong:#71806b;--map-bg:#eef1e8;--map-route:#236e60;--map-slow:#98501c;--map-label:#fbfcf8;--map-forbidden:#a54545;margin:24px 0;padding:20px;border:1px solid var(--line);border-radius:10px;background:var(--surface);min-width:0}
+.is-dark .map-panel{--map-zone:#343628;--map-zone-edge:#bba16b;--map-grid:#496052;--map-grid-strong:#8b9e8d;--map-bg:#16201b;--map-route:#76d9bf;--map-slow:#efb175;--map-label:#19251f;--map-forbidden:#ef9494}
+[data-theme="mike"] .map-panel{--map-zone:#242c38;--map-zone-edge:#839cab;--map-grid:#3c5068;--map-grid-strong:#839cb8;--map-bg:#0d1420;--map-route:#66dffe;--map-slow:#edb88a;--map-label:#131c2a}
+[data-theme="furion"] .map-panel{--map-zone:#303821;--map-zone-edge:#a6a468;--map-grid:#405942;--map-grid-strong:#8caa84;--map-bg:#111d15;--map-route:#79d7c3;--map-slow:#e8c48b;--map-label:#18261c}
+.map-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.map-heading .eyebrow{font-size:10px;letter-spacing:1.25px;margin-bottom:5px}.map-heading h3{font-size:20px;font-weight:650;letter-spacing:-.4px;margin:0}.map-panel button{font-size:12px;font-weight:600;background:var(--surface);color:var(--muted);border:1px solid var(--control-line);border-radius:6px;min-height:38px;padding:8px 12px}.map-panel button:hover{color:var(--ink);background:var(--surface2)}.map-panel button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}.map-panel button:disabled{opacity:.45;cursor:not-allowed}.map-panel button[aria-pressed="true"]{background:var(--accent-bg);color:var(--ink);border-color:var(--accent)}
+#map-content[hidden]{display:none!important}.map-panel.is-collapsed .map-heading{margin-bottom:0}#map-collapse{color:var(--ink);background:transparent;white-space:nowrap;border-color:var(--line);font-size:11px;min-height:36px}
+.map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.map-modes,.map-rotation,.map-zoom{display:flex;align-items:center;gap:3px}.map-modes{padding:3px;border:1px solid var(--line);border-radius:8px;background:var(--surface2)}.map-modes button{border:1px solid transparent;background:transparent;min-height:34px;padding:6px 11px}.map-modes button[aria-pressed="true"]{background:var(--surface);border-color:var(--control-line)}.map-tools{display:flex;align-items:center;gap:10px;margin-left:auto}.map-tools button{width:36px;min-width:36px;min-height:36px;padding:3px;font:20px/1 var(--mono)}.map-panel #map-reset-rotation{width:45px;font:11px/1 var(--mono);color:var(--ink);background:var(--surface2)}#map-angle{display:inline-block;min-width:3ch;text-align:center}.map-help{font-size:12px;line-height:1.5;color:var(--muted);margin:10px 0 12px;min-height:18px}
+.map-viewport{position:relative;border:1px solid var(--control-line);border-radius:7px;overflow:hidden;background:var(--map-bg)}#march-map-svg{display:block;width:100%;height:auto;aspect-ratio:8/5;touch-action:none;user-select:none;cursor:crosshair;color:var(--ink)}#march-map-svg:focus-visible{outline:2px solid var(--focus);outline-offset:-4px}#march-map-svg[data-map-mode="pan"]{cursor:grab}#march-map-svg.is-dragging{cursor:grabbing}.map-readout{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--map-label);border-top:1px solid var(--line);padding:7px 10px 6px;font:10px/1.5 var(--mono);color:var(--muted);pointer-events:none}.map-readout span{overflow-wrap:anywhere}.map-readout span:last-child{text-align:right}.map-readout .is-invalid{color:var(--map-forbidden);font-weight:650}.map-scale-wrap{padding:0 10px 8px;background:var(--map-label);pointer-events:none}#map-scale{display:block;width:80px;white-space:nowrap;border:solid var(--muted);border-width:0 1px 2px;font:9px/1.6 var(--mono);text-align:center;color:var(--muted)}
+.map-grid-line{stroke:var(--map-grid);stroke-width:.7;opacity:.63;vector-effect:non-scaling-stroke}.map-grid-major{stroke:var(--map-grid-strong);stroke-width:1.1;opacity:.78}.map-zone-central{fill:var(--map-zone);stroke:var(--map-zone-edge);stroke-width:1.5;vector-effect:non-scaling-stroke}.map-zone-hatch{stroke:var(--map-zone-edge);stroke-width:.5;opacity:.14}.map-zone-label,.map-tracker-zone-label{fill:var(--ink);font-family:var(--mono);font-weight:650;paint-order:stroke;stroke:var(--map-label);stroke-width:4;stroke-linejoin:round;pointer-events:none}.map-route-underlay,.map-route-normal,.map-route-slow{fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round;pointer-events:none}.map-route-underlay{stroke:var(--map-label);stroke-width:7;opacity:.94}.map-route-normal,.map-route-slow{stroke-width:3.4}.map-route-normal{stroke:var(--map-route)}.map-route-slow{stroke:var(--map-slow);stroke-dasharray:8 5}.map-route-node{fill:var(--map-label);stroke:var(--map-slow);stroke-width:2;vector-effect:non-scaling-stroke;pointer-events:none}
+.map-tracker-zone{vector-effect:non-scaling-stroke;stroke-width:1}.map-zone-badlands{fill:#e1e2da;stroke:#85745e}.map-zone-plains{fill:#759267;fill-opacity:.18;stroke:#607b57;stroke-opacity:.8}.map-zone-fertile{fill:#558451;fill-opacity:.19;stroke:#477346;stroke-opacity:.85}.map-zone-ruin,.map-zone-ruins{fill:none;stroke:#625b56;stroke-opacity:.9;stroke-width:1}.map-zone-alert{fill:#b64f4b;fill-opacity:.18;stroke:#9e3d3a;stroke-opacity:.9}.map-zone-core{fill:#43534e;fill-opacity:.12;stroke:var(--map-forbidden);stroke-width:2;stroke-dasharray:5 3}.map-core-hatch{stroke:var(--map-forbidden);stroke-width:1;stroke-opacity:.5}.is-dark .map-zone-badlands{fill:var(--map-bg);stroke:#a39784}.is-dark .map-zone-plains{stroke:#9bbd8e;fill-opacity:.25}.is-dark .map-zone-fertile{stroke:#84b581;fill-opacity:.3}.is-dark .map-zone-ruin,.is-dark .map-zone-ruins{stroke:#b5aca4;fill-opacity:.28}.is-dark .map-zone-alert{stroke:#d8837d;fill-opacity:.24}.is-dark .map-zone-core{stroke:var(--map-forbidden);fill-opacity:.2}
+.map-marker{cursor:pointer;outline:none}.map-marker[data-kind="town"],.map-marker[data-kind="custom"]{cursor:grab}.map-marker-hit{fill:transparent;stroke:none}.map-footprint-fill{fill:var(--accent-bg);fill-opacity:.96}.map-footprint-cell{fill:none;stroke:var(--ink);stroke-opacity:.6;stroke-width:.85}.map-footprint-outline{fill:none;stroke:var(--ink);stroke-width:1.7}.map-marker[data-kind="town"] .map-footprint-fill{fill:var(--accent)}.map-marker[data-kind="town"] .map-footprint-cell{stroke:var(--surface);stroke-opacity:.95;stroke-width:1.1}.map-marker[data-kind="town"] .map-footprint-outline{stroke:var(--ink);stroke-width:2}.map-marker[data-kind="castle"] .map-footprint-fill{fill:var(--map-zone-edge);fill-opacity:.62}.map-marker[data-kind="custom"] .map-footprint-fill{fill:var(--pet);fill-opacity:.6}.map-marker.is-selected .map-footprint-outline,.map-marker:focus-visible .map-footprint-outline{stroke:var(--focus);stroke-width:3}.map-marker:focus-visible .map-footprint-outline{stroke-dasharray:4 2}.map-footprint-letter{fill:var(--ink);font-family:var(--mono);font-weight:750;paint-order:stroke;stroke:var(--map-label);stroke-width:3;pointer-events:none}.map-label-backdrop{fill:var(--map-label);fill-opacity:.96;stroke:var(--line);stroke-width:.7;vector-effect:non-scaling-stroke}.map-marker.is-selected .map-label-backdrop{stroke:var(--focus);stroke-width:1.2}.map-marker-label,.map-marker-time{fill:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:600;pointer-events:none}.map-marker-time{font-family:var(--mono);font-weight:400;fill:var(--muted)}.map-placement-preview{fill:var(--focus);fill-opacity:.14;stroke:var(--focus);stroke-width:2;stroke-dasharray:4 3}.map-placement-preview.is-invalid{fill:var(--map-forbidden);fill-opacity:.25;stroke:var(--map-forbidden);stroke-width:2.5}.map-cursor-line{stroke:var(--focus);stroke-width:1.5;stroke-dasharray:3 3;vector-effect:non-scaling-stroke;pointer-events:none}
+.map-underlay{display:flex;justify-content:space-between;align-items:center;gap:10px 18px;flex-wrap:wrap;margin:11px 0 16px}.map-view-controls{display:flex;gap:4px;flex-wrap:wrap}.map-view-controls button{font-size:11px;min-height:34px;padding:7px 9px;background:transparent;border-color:var(--line)}.map-terrain-key{display:flex;align-items:center;flex-wrap:wrap;gap:8px 15px;color:var(--muted);font-size:11px;line-height:1.5}.map-terrain-key>span{display:inline-flex;align-items:center;gap:5px}.map-terrain-key strong{font-weight:650;color:var(--ink)}.map-terrain-sample{display:inline-block;flex:none;width:20px;border-top:3px solid var(--map-route)}.map-terrain-sample.slow{height:11px;border:1.5px dashed var(--map-slow);background:color-mix(in srgb,var(--map-slow) 14%,transparent)}
+.map-destination-picker{display:flex;align-items:baseline;gap:10px 13px;flex-wrap:wrap;margin:0 0 16px}.map-destination-label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}.map-targets{display:flex;flex-wrap:wrap;gap:5px;min-width:0}.map-panel .map-target-button{font-size:11px;min-height:34px;padding:7px 10px;border-radius:5px;white-space:normal;overflow-wrap:anywhere;text-align:left;line-height:1.4}.map-panel .map-target-button[aria-pressed="true"]{background:var(--accent-bg);border-color:var(--accent);color:var(--ink)}.map-guide{border-top:1px solid var(--line);padding-top:11px}.map-guide>summary{font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;width:fit-content;min-height:28px;line-height:28px}.map-guide>summary:hover{color:var(--ink)}.map-guide>summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}.map-guide-content{font-size:12px;line-height:1.6;color:var(--muted);max-width:76ch;padding-top:7px}.map-guide-content p{margin:10px 0}.map-zone-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:2px 0 13px;font-size:11px}.map-zone-legend>span{display:inline-flex;align-items:center;gap:6px}.map-zone-legend i{width:11px;height:11px;border:1px solid #0003;border-radius:2px}.zone-badlands{background:#d8d8d2}.zone-plains{background:#849d78}.zone-fertile{background:#669260}.zone-ruin{background:#827a73}.zone-alert{background:#b65c57}.zone-core{background:#50605b;border-color:var(--map-forbidden)!important;box-shadow:inset 0 0 0 2px var(--map-label)}
+.map-terrain-slow-zone{fill:var(--map-slow);fill-opacity:.14;stroke:var(--map-slow);stroke-width:1.8;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}.is-dark .map-terrain-slow-zone{fill-opacity:.11}
+@media(max-width:1100px) and (min-width:741px){.map-panel{padding:16px}.map-toolbar{gap:8px}.map-tools{gap:7px}.map-modes button{padding:6px 8px}.map-terrain-key{font-size:10px}}
+@media(max-width:540px){.map-panel{padding:14px 12px;margin:20px 0}.map-heading{margin-bottom:14px}.map-heading h3{font-size:18px}.map-heading .eyebrow{font-size:9px}.map-modes{flex:1}.map-modes button{flex:1;padding:7px 8px;min-height:38px;font-size:11px}.map-tools{width:100%;justify-content:space-between;margin:0}.map-tools button{min-width:40px;width:40px;min-height:40px}.map-panel #map-reset-rotation{width:48px}.map-toolbar{gap:7px}.map-help{font-size:11px;margin:9px 0 10px}.map-readout{font-size:9px;gap:8px;padding:7px 8px 5px;align-items:flex-start}.map-readout span:first-child{max-width:47%}.map-readout span:last-child{max-width:51%}.map-scale-wrap{padding:0 8px 7px}.map-underlay{margin:10px 0 14px;gap:10px}.map-view-controls{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.map-view-controls button{min-height:40px;padding:7px 5px;font-size:10px}.map-terrain-key{font-size:10px;gap:8px 16px}.map-terrain-sample{width:18px}.map-destination-picker{gap:8px;margin-bottom:12px}.map-destination-label{width:100%;font-size:10px}.map-targets{gap:5px}.map-panel .map-target-button{min-height:40px;font-size:10px;padding:8px 10px}.map-guide>summary{font-size:11px;min-height:36px;line-height:36px}.map-guide-content{font-size:11px}.map-zone-legend{font-size:10px;gap:8px 12px}}
+
+/* Public planner: results first, quieter controls, clear numeric hierarchy. */
+.app{max-width:1300px;padding:0 32px}.masthead{height:76px}.intro{padding:30px 0 28px}.intro h1{font-size:36px;letter-spacing:-1.3px}.intro p{font-size:14px;margin-top:9px}.world-tag{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:30px;padding:6px 12px;white-space:nowrap}
+.workspace{grid-template-columns:322px minmax(0,1fr);gap:24px;background:none;border:0;border-radius:0;overflow:visible;box-shadow:none;align-items:start}
+.controls{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden;box-shadow:var(--shadow)}.control-section{padding:21px 22px}.control-section:last-of-type{border-bottom:0}.control-section h2{font-size:14px;letter-spacing:0;margin-bottom:14px}.march-choice{background:var(--surface)}.choice-fields{display:grid;gap:13px}.field label{font-size:12px;line-height:1.4}.field input,.field select{border-radius:6px;min-height:44px}.field select{font-size:13px}.hint{font-size:11px;line-height:1.55;margin-top:7px}.hint:empty{display:none}.coordinate-readout{font-size:10px;margin-top:9px}.section-heading .text-button{font-size:11px;min-height:30px;padding:0 0 9px}.speed-fields{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:12px}.base-field{margin:0}.pet-setting{margin-top:15px;padding-top:12px}.toggle-label{min-height:35px}.toggle-label strong{font-size:12px}.switch{width:38px}#pet-fields{padding-top:13px}#hunting-fields{margin-top:15px}#speed-rule{font-size:11px}.coordinate-reference{margin-top:13px}.conditional-fields{margin-top:12px;padding-top:12px}
+#custom-section{padding-top:0;padding-bottom:0}#destination-settings{border:0}#destination-settings summary{min-height:58px;padding:17px 0;font-size:13px}#destination-settings .summary-note{font-size:10px}.destination-fields{padding-bottom:20px}.destination-fields>.field-pair{margin-top:12px}.custom-section>.field-pair{margin-top:0}.mobile-jump{display:none}
+.results{padding:0;display:flex;flex-direction:column;gap:20px;scroll-margin-top:20px}.estimates-card{padding:24px 26px 6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);min-width:0}.results-top h2{font-size:25px;letter-spacing:-.6px}.results-top .eyebrow{font-size:9px;letter-spacing:1.3px;line-height:1.5;max-width:48ch}.button{min-height:40px;border-radius:6px}.results-top .button{padding:8px 13px;font-size:12px}.result-status{background:none;padding:0;min-height:18px;font-size:12px;margin:12px 0 0;line-height:1.6}.result-status .status-dot{width:5px;height:5px}.march-context{font-size:12px;padding:9px 12px;margin:12px 0 0;border-radius:0 4px 4px 0}.result-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:21px 0 13px}.format-picker{border-radius:6px;padding:3px;background:var(--surface2)}.format-picker button{font-size:11px;min-height:32px;min-width:62px;padding:6px 10px}.precision-choice{display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:11px;color:var(--muted);cursor:pointer;min-height:38px}.precision-choice input{min-height:16px;width:16px;height:16px;padding:0;margin:0;accent-color:var(--accent)}
+#results-table th{font-size:10px;letter-spacing:.4px;text-transform:none;padding:10px 12px;font-weight:600}#results-table th:first-child{width:42%;padding-left:12px}#results-table td{padding:13px 12px;vertical-align:middle}#results-table td:last-child,#results-table th:last-child{padding-right:12px}.target-name{font-size:13px;margin:0}.target-coords{font-size:10px;margin-top:3px}.target-coords span{display:none}.target-name .native-name{font-size:10px}.result-target{border:0;background:none;color:var(--ink);font-size:13px;font-weight:650;padding:4px 0;text-align:left;cursor:pointer;line-height:1.35}.result-target:hover{color:var(--accent)}.selected-target td{background:var(--accent-bg)}.selected-target td:first-child{box-shadow:inset 2px 0 var(--accent)}.time-value{font-size:29px;letter-spacing:-1.2px;line-height:1.15}.time-value .unit{font-size:11px;color:var(--muted)}.raw{font-size:11px;line-height:1.5;margin-top:6px}.raw .raw-label{font-size:9px;margin-right:4px}.cap-note{font-size:10px;margin-top:5px}.empty-value{font-size:22px;color:var(--muted)}.cell-note{font-size:10px}.cell-error{font-size:11px;color:var(--danger)}.results[data-raw-visible="false"] .raw,.results[data-pet="false"] .pet-cell,.results[data-pet="false"] .pet-column{display:none}.results[data-pet="false"] #results-table th:first-child{width:60%}.result-foot{font-size:11px;padding:13px 0 15px}.raw-description{font-size:11px;line-height:1.6;color:var(--muted);margin-bottom:12px}.route-details summary{font-size:12px;padding:16px 0}.route-details .summary-note{font-size:10px}.route-details .field{max-width:320px}.route-details{margin-top:0}.route-endpoints{font-size:12px}.segment-list{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.segment{padding:6px 0 6px 12px}.segment strong{font-size:12px}.segment span{font-size:11px}
+.empty-results{text-align:center;padding:28px 15px 34px;min-height:225px;border-top:1px solid var(--line)}.empty-results svg{width:48px;height:48px;color:var(--accent);margin:0 auto 13px}.empty-results h3{font-size:17px;letter-spacing:-.2px;margin:0 0 6px}.empty-results p{color:var(--muted);font-size:12px;margin-bottom:15px}.empty-results .button{font-size:11px}.results.is-empty .result-foot,.results.is-empty .route-details,.results.is-empty .result-toolbar,.results.is-empty .result-status{display:none}
+#battle-map .map-panel{margin:0;background:var(--surface);border-radius:10px;padding:20px;box-shadow:var(--shadow)}.map-heading h3{font-size:18px}#map-title{letter-spacing:-.4px}.map-panel .map-target-button{font-size:11px}.support{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 22px;margin-top:24px}.support summary{font-size:13px;padding:17px 0}.support .details-content{padding-bottom:20px}.support .details-content p{font-size:12px}.notes-grid{gap:30px}.notes-grid h3{font-size:13px;margin-bottom:8px}footer{padding:24px 0;font-size:11px}.notice{font-size:12px;max-width:min(440px,calc(100% - 32px));text-align:center}.skip-link{position:fixed;top:10px;left:10px;z-index:9;background:var(--ink);color:var(--surface);padding:10px 15px;border-radius:5px;transform:translateY(-160%)}.skip-link:focus{transform:none}
+[data-theme="mike"] .intro,[data-theme="furion"] .intro{min-height:206px;margin:22px 0;padding:24px 30px;border-radius:10px}.intro .world-tag{align-self:flex-end}[data-theme="mike"] .intro .world-tag,[data-theme="furion"] .intro .world-tag{display:none}[data-theme="mike"] .intro h1,[data-theme="furion"] .intro h1{font-size:36px;max-width:410px}[data-theme="mike"] .intro p,[data-theme="furion"] .intro p{font-size:12px;max-width:280px}[data-theme="mike"] .intro-copy,[data-theme="furion"] .intro-copy{width:50%}
+.skip-link{top:10px;transform:none;clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap}.skip-link:focus{clip-path:none;width:auto;height:auto;overflow:visible}
+@media(min-width:601px){[data-theme="mike"] .mike-portrait img,[data-theme="furion"] .furion-portrait img{height:330px;top:-25px;right:-10px}}
+@media(max-width:1050px){.app{padding:0 22px}.workspace{grid-template-columns:290px minmax(0,1fr);gap:18px}.control-section{padding:19px}.estimates-card{padding:22px 20px 5px}.result-toolbar{gap:8px}.precision-choice{font-size:10px}.time-value{font-size:26px}.world-tag{display:none}.intro h1{font-size:32px}.result-target{font-size:12px}.raw{font-size:10px}}
+@media(max-width:800px){.workspace{grid-template-columns:1fr;gap:20px}.controls{display:grid;grid-template-columns:1fr 1fr}.controls .control-section{grid-column:auto;grid-row:auto;border:0;border-bottom:1px solid var(--line)}.controls .march-choice{display:block;grid-column:1/-1}.choice-fields{grid-template-columns:1fr 1fr;gap:12px}.controls .town-section{grid-column:1;grid-row:2;border-right:1px solid var(--line)}.controls .speed-section{grid-column:2;grid-row:2 / span 2;border-left:0}.controls .custom-section{grid-column:1;grid-row:3;border-right:1px solid var(--line)!important}.mobile-jump{display:flex;grid-column:1/-1;align-items:center;justify-content:center;min-height:44px;padding:9px;font-size:12px;border-top:1px solid var(--line)}.results-top h2{font-size:25px}.time-value{font-size:29px}.result-target{font-size:13px}.raw{font-size:11px}.controls .march-choice h2{margin-bottom:11px}.support{margin-top:20px}.intro{padding:25px 0}.intro h1{font-size:33px}#battle-map .map-panel{padding:18px}}
+@media(max-width:510px){.app{padding:0 14px}.masthead{height:66px}.wordmark{font-size:11px;gap:8px}.wordmark svg{width:24px;height:24px}.theme-picker button{min-width:43px;padding:7px;font-size:10px}.intro{padding:24px 0 21px}.intro .eyebrow{font-size:8px;letter-spacing:1.3px}.intro h1{font-size:29px;letter-spacing:-1px}.intro p{font-size:12px;margin-top:8px}.controls{display:block}.control-section{padding:17px 18px}.controls .control-section{border-right:0!important}.control-section h2{font-size:13px;margin-bottom:12px}.choice-fields{gap:10px;grid-template-columns:1fr 1.12fr}.field select{font-size:12px;padding:10px 8px}.hint{font-size:11px}.speed-fields{grid-template-columns:1.3fr 1fr}.estimates-card{padding:20px 15px 3px}.results-top h2{font-size:23px}.results-top .eyebrow{font-size:8px;letter-spacing:1px;max-width:30ch}.results-top .button{font-size:11px;padding:8px 11px}.result-toolbar{margin-top:17px}.precision-choice{font-size:10px}.format-picker button{min-width:57px;min-height:33px;padding:6px 9px;font-size:10px}#results-table th{font-size:9px;padding:10px 8px}#results-table th:first-child{width:39%;padding-left:8px}#results-table td{padding:13px 8px}#results-table td:last-child,#results-table th:last-child{padding-right:8px}.result-target{font-size:12px}.time-value{font-size:25px}.raw{font-size:10px}.raw .raw-label{display:block;margin-right:0;font-size:9px}.result-foot{font-size:10px}.result-status{font-size:11px}.empty-results{padding:23px 5px 28px;min-height:220px}.empty-results h3{font-size:16px}#battle-map .map-panel{padding:13px;margin:0}.support{padding:0 17px}.support summary{font-size:12px}.notes-grid{grid-template-columns:1fr;gap:16px}.result-toolbar{flex-wrap:wrap}.preset-grid{grid-template-columns:1fr 1fr}footer{font-size:10px;gap:6px}.segment-list{grid-template-columns:1fr}.route-details .summary-note{font-size:9px}
+  [data-theme="mike"] .intro,[data-theme="furion"] .intro{min-height:235px;display:block;margin:18px 0;padding:139px 20px 21px}[data-theme="mike"] .intro-copy,[data-theme="furion"] .intro-copy{width:100%;max-width:none}[data-theme="mike"] .intro h1,[data-theme="furion"] .intro h1{font-size:27px;max-width:300px}[data-theme="mike"] .intro p,[data-theme="furion"] .intro p{font-size:11px;margin-top:7px;max-width:300px}[data-theme="mike"] .mike-portrait,[data-theme="furion"] .furion-portrait{height:100%;inset:0}[data-theme="mike"] .intro:after{background:linear-gradient(0deg,#080b18 0%,#080b18e8 28%,#080b1880 55%,transparent 85%)}[data-theme="furion"] .intro:after{background:linear-gradient(0deg,#07110c 0%,#07110ce8 28%,#07110c80 55%,transparent 85%)}[data-theme="mike"] .mike-portrait img{object-position:72% 35%}[data-theme="furion"] .furion-portrait img{object-position:83% 34%}
+}
+@media(max-width:510px){
+  .results[data-raw-visible="true"] #results-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .results[data-raw-visible="true"] #target-rows tr{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);padding-bottom:5px}
+  .results[data-raw-visible="true"] #target-rows td{border:0;padding:10px 12px;min-width:0}
+  .results[data-raw-visible="true"] #target-rows td:first-child{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:0}
+  .results[data-raw-visible="true"] .target-coords{margin:0;text-align:right}
+  .results[data-raw-visible="true"] .normal-cell,.results[data-raw-visible="true"] .pet-cell{text-align:left}
+  .results[data-raw-visible="true"] .normal-cell:before,.results[data-raw-visible="true"] .pet-cell:before{display:block;font-size:10px;color:var(--muted);margin-bottom:5px;content:'Normal'}
+  .results[data-raw-visible="true"] .pet-cell:before{content:'With pet';color:var(--pet)}
+  .results[data-raw-visible="true"][data-pet="false"] .normal-cell{grid-column:1/-1}
+  .results[data-raw-visible="true"] .raw{font-size:10px;letter-spacing:-.1px}.results[data-raw-visible="true"] .raw>span:last-child{display:none}.results[data-raw-visible="true"] .raw-label:after{content:' seconds'}.results[data-raw-visible="true"] .selected-target td:first-child{box-shadow:none}
+  .results[data-raw-visible="true"] #target-rows tr.selected-target{box-shadow:inset 2px 0 var(--accent);background:var(--accent-bg)}
+}
+@media(min-width:511px) and (max-width:600px){
+  [data-theme="mike"] .mike-portrait,[data-theme="furion"] .furion-portrait{inset:0;height:100%}
+  [data-theme="mike"] .mike-portrait img,[data-theme="furion"] .furion-portrait img{object-position:78% 45%}
+  [data-theme="mike"] .intro:after{background:linear-gradient(90deg,#080b18f5 0%,#080b18e6 28%,#080b1860 52%,transparent 75%)}
+  [data-theme="furion"] .intro:after{background:linear-gradient(90deg,#07110cf5 0%,#07110ce6 28%,#07110c60 52%,transparent 75%)}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to calculator</a>
+<div class="app">
+  <header class="masthead">
+    <a class="wordmark" href="#main" aria-label="Kingshot march planner"><svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M4 24V11h5V5h4v6h3V5h4v6h4v13H4Z" stroke="currentColor" stroke-width="1.6"/><path d="M11 24v-7h6v7M2 24h24" stroke="currentColor" stroke-width="1.6"/></svg><span>KINGSHOT <span class="wordmark-sub">MARCH PLANNER</span></span></a>
+    <div class="header-tools"><span class="offline"><span></span>Works offline</span><div id="theme-toggle" class="theme-picker" role="group" aria-label="Color theme"><button type="button" data-theme-choice="light" aria-pressed="false">Light</button><button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button></div></div>
+  </header>
+  <main id="main">
+    <div class="intro"><div class="intro-copy"><div class="eyebrow">EVERY SECOND COUNTS</div><h1>Plan your next march<span>.</span></h1><p>Your town. Your bonuses. Travel times at a glance.</p></div><span class="world-tag">Normal world</span></div>
+    <div class="workspace">
+      <aside class="controls" aria-label="March settings">
+        <section class="control-section march-choice"><h2>March setup</h2><div class="choice-fields"><div class="field"><label for="march-action">March type</label><select id="march-action" aria-describedby="march-help"></select></div><div class="field"><label for="march-target" id="march-target-label">Target</label><select id="march-target" aria-describedby="march-help"></select></div></div><p id="march-help" class="hint"></p>
+          <div id="auto-fields" class="conditional-fields" hidden><label class="check-label"><input id="auto-hunt" type="checkbox">Automatic hunting</label><p class="hint">Time to this target. Auto-hunt chooses targets as it runs.</p></div>
+          <div id="boss-fields" class="conditional-fields" hidden><div class="field"><label for="boss-activity">Activity travel limit</label><select id="boss-activity" aria-describedby="boss-help"><option value="">No limit applied</option><option value="2940001">30-second activity cap</option></select></div><p id="boss-help" class="hint">Choose the travel limit for your world boss event.</p></div>
+        </section>
+        <section class="control-section town-section"><div class="section-heading"><h2>Your town</h2><button id="example" class="text-button" type="button">Try example ↗</button></div>
+          <div class="field-pair"><div class="field"><label for="town-x">X coordinate</label><input id="town-x" type="number" step="any" inputmode="decimal" placeholder="590" aria-describedby="town-x-error town-placement-error town-help"><span class="field-error" id="town-x-error"></span></div><div class="field"><label for="town-y">Y coordinate</label><input id="town-y" type="number" step="any" inputmode="decimal" placeholder="590" aria-describedby="town-y-error town-placement-error town-help"><span class="field-error" id="town-y-error"></span></div></div>
+          <p id="town-placement-error" class="field-error" role="status"></p><p class="hint" id="town-help">Use the coordinates shown in game — your town’s lower corner.</p><p id="origin-center" class="coordinate-readout">Center <span>—, —</span></p>
+        </section>
+        <section class="control-section speed-section"><h2>March bonuses</h2><div class="speed-fields">
+          <div class="field"><label for="normal-bonus">March speed bonus</label><div class="input-affix"><input id="normal-bonus" type="number" value="0" min="0" step="any" inputmode="decimal" aria-describedby="normal-bonus-error bonus-help"><span>%</span></div><span class="field-error" id="normal-bonus-error"></span></div>
+          <div class="field base-field"><label for="base-speed">Base speed</label><input id="base-speed" type="number" value="11" min="0" step="any" inputmode="decimal" aria-describedby="base-speed-error base-help"><span class="field-error" id="base-speed-error"></span></div>
+          </div><p class="hint" id="bonus-help">Keep pet and hunting bonuses separate.</p><p class="hint" id="base-help">Base speed at 0% bonus. Default: 11.</p><p class="hint" id="speed-rule"></p>
+          <div id="hunting-fields" hidden><div class="field"><label for="hunting-bonus">Hunting march bonus</label><div class="input-affix"><input id="hunting-bonus" type="number" value="0" min="0" step="any" inputmode="decimal" aria-describedby="hunting-bonus-error hunting-help"><span>%</span></div><span class="field-error" id="hunting-bonus-error"></span><p class="hint" id="hunting-help">Include applicable hero bonuses here, once.</p></div></div>
+          <div class="pet-setting"><label class="toggle-label" for="pet-enabled"><span><strong>Compare pet buff</strong></span><input id="pet-enabled" type="checkbox"><span class="switch" aria-hidden="true"></span></label><div id="pet-fields" hidden><div class="field"><label for="pet-bonus">Pet march bonus</label><div class="input-affix"><input id="pet-bonus" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 30" aria-describedby="pet-bonus-error pet-help"><span>%</span></div><span class="field-error" id="pet-bonus-error"></span><p class="hint" id="pet-help">Added to your march speed bonus.</p></div></div></div>
+        </section>
+        <section class="control-section custom-section" id="custom-section"><details id="destination-settings"><summary><span id="destination-title">Custom destination</span><span id="destination-optional" class="summary-note">Optional</span></summary><div class="destination-fields">
+          <div class="field" id="comparison-kind-field"><label for="comparison-kind">Target type</label><select id="comparison-kind"><option value="tower">Tower</option><option value="castle">Castle</option></select></div>
+          <div class="field-pair"><div class="field"><label for="custom-x">X coordinate</label><input id="custom-x" type="number" step="any" inputmode="decimal" placeholder="X" aria-describedby="custom-x-error custom-placement-error destination-help"><span class="field-error" id="custom-x-error"></span></div><div class="field"><label for="custom-y">Y coordinate</label><input id="custom-y" type="number" step="any" inputmode="decimal" placeholder="Y" aria-describedby="custom-y-error custom-placement-error destination-help"><span class="field-error" id="custom-y-error"></span></div></div><p id="custom-placement-error" class="field-error" role="status"></p>
+          <div class="field coordinate-reference"><label for="custom-anchor">Coordinates refer to</label><select id="custom-anchor"><option value="corner">Visible lower corner</option><option value="point">Movement center</option></select></div><p id="destination-help" class="hint"></p>
+        </div></details></section>
+        <section class="control-section custom-section" id="leader-section" hidden><h2>Rally leader’s town</h2><div class="field-pair"><div class="field"><label for="leader-x">Leader X</label><input id="leader-x" type="number" step="any" inputmode="decimal" placeholder="X" aria-describedby="leader-x-error leader-placement-error leader-help"><span class="field-error" id="leader-x-error"></span></div><div class="field"><label for="leader-y">Leader Y</label><input id="leader-y" type="number" step="any" inputmode="decimal" placeholder="Y" aria-describedby="leader-y-error leader-placement-error leader-help"><span class="field-error" id="leader-y-error"></span></div></div><p id="leader-placement-error" class="field-error" role="status"></p><div class="field coordinate-reference"><label for="leader-anchor">Coordinates refer to</label><select id="leader-anchor"><option value="corner">Visible lower corner</option><option value="point">Movement center</option></select></div><p class="hint" id="leader-help">Use the leader’s location and your own march bonuses.</p></section>
+        <a class="mobile-jump" href="#estimates">View travel times ↓</a>
+      </aside>
+      <section class="results" id="estimates" aria-labelledby="results-title">
+        <div class="estimates-card">
+          <div class="results-top"><div><div class="eyebrow" id="result-action-label">ATTACK · CASTLE & TOWERS</div><h2 id="results-title">Travel times</h2></div><button id="copy-results" class="button secondary" type="button" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="7" y="7" width="9" height="10" rx="1.5"/><path d="M12 7V3H3v10h4"/></svg>Copy</button></div>
+          <div id="result-status" class="result-status"><span class="status-dot"></span><span id="status-text">Enter your town coordinates.</span></div><div id="march-context" class="march-context" role="status"></div>
+          <div class="result-toolbar"><div class="format-picker" role="group" aria-label="Time format"><button type="button" data-time-format="seconds" aria-pressed="true">Seconds</button><button type="button" data-time-format="minutes-seconds" aria-pressed="false">m:ss</button></div><label class="precision-choice"><input type="checkbox" id="show-raw">Show raw seconds</label></div>
+          <div id="empty-results" class="empty-results"><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><rect x="8" y="8" width="40" height="40" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M28 8v40M8 28h40" stroke="currentColor" stroke-width="1.5"/><circle cx="28" cy="28" r="7" fill="var(--surface)" stroke="currentColor" stroke-width="1.5"/></svg><h3 id="empty-title">Add your town coordinates</h3><p id="empty-help">Travel times update as you type.</p><button id="empty-map" type="button" class="button secondary">Place your town on the map ↗</button></div>
+          <table id="results-table"><caption class="sr-only">Travel time for each destination, with an optional pet comparison and unrounded seconds.</caption><thead><tr><th scope="col">Destination</th><th scope="col">Normal</th><th scope="col" class="pet-column">With pet <span id="pet-header-state">OFF</span></th></tr></thead><tbody id="target-rows"></tbody></table>
+          <div class="result-foot"><span id="target-count"></span><span id="time-format-note"></span></div>
+          <p class="raw-description" id="raw-display-key" hidden>Raw seconds are the total before rounding.</p><span id="time-display-key" class="sr-only"></span>
+          <details class="route-details" id="route-details"><summary><span>Route details</span><span class="summary-note">Terrain & timing</span></summary><div class="details-content"><div class="field"><label for="inspect-target">Destination</label><select id="inspect-target"><option value="castle">Castle</option></select></div><div id="route-content"></div></div></details>
+        </div>
+        <div id="battle-map"><section class="map-panel" aria-labelledby="map-title">
+  <div class="map-heading"><div><div class="eyebrow">ROUTE PLANNER</div><h3 id="map-title">Battle map</h3></div><button id="map-collapse" type="button" aria-expanded="true" aria-controls="map-content">Collapse −</button></div>
+  <div id="map-content">
+    <div class="map-toolbar">
+      <div class="map-modes" role="group" aria-label="Map action"><button type="button" data-map-mode="town" aria-pressed="true">Place TC</button><button type="button" data-map-mode="custom" aria-pressed="false">Place target</button><button type="button" data-map-mode="pan" aria-pressed="false">Pan</button></div>
+      <div class="map-tools">
+        <div class="map-rotation" role="group" aria-label="Map rotation"><button id="map-rotate-left" type="button" aria-label="Rotate map counterclockwise by 45 degrees" title="Rotate 45° counterclockwise">↶</button><button id="map-reset-rotation" type="button" aria-label="Reset map rotation to zero degrees" aria-describedby="map-angle" title="Reset rotation to 0°"><span id="map-angle">0°</span></button><button id="map-rotate-right" type="button" aria-label="Rotate map clockwise by 45 degrees" title="Rotate 45° clockwise">↷</button></div>
+        <div class="map-zoom" role="group" aria-label="Map zoom"><button id="map-zoom-out" type="button" aria-label="Zoom out">−</button><button id="map-zoom-in" type="button" aria-label="Zoom in">+</button></div>
+      </div>
+    </div>
+    <p id="map-help" class="map-help">Tap to place your TC, or drag its four tiles to move it.</p>
+    <div class="map-viewport">
+      <svg id="march-map-svg" viewBox="0 0 800 500" tabindex="0" role="group" aria-label="Interactive battle map" aria-describedby="map-help map-keyboard-help">
+        <title>Castle, turrets, your TC, and destination</title>
+        <desc>Top-down map with equal scale on both axes. Each TC covers two by two tiles. The shaded area has a 0.5× terrain speed factor; outside it the factor is 1×. Thin zone outlines are separate from the dashed slow-terrain boundary. The hatched castle core cannot hold a TC.</desc>
+        <defs><pattern id="map-zone-pattern" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M0 10L10 0" class="map-zone-hatch"/></pattern><pattern id="map-core-pattern" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M-2 2L2 -2M0 9L9 0M7 11L11 7" class="map-core-hatch"/></pattern></defs>
+        <g id="map-zones"></g><g id="map-grid"></g><g id="map-routes"></g><g id="map-markers"></g><g id="map-cursor" aria-hidden="true"></g>
+      </svg>
+      <div class="map-readout" aria-hidden="true"><span id="map-view-label">1 square = 1 tile · TC 2 × 2</span><span id="map-cursor-label">Center · X, Y</span></div>
+      <div class="map-scale-wrap" aria-hidden="true"><span id="map-scale">4 tiles</span></div>
+    </div>
+    <div class="map-underlay">
+      <div class="map-view-controls" role="group" aria-label="Map view"><button id="map-closeup" type="button">Castle</button><button id="map-zones-view" type="button">Zones</button><button id="map-whole-world" type="button">World</button><button id="map-fit" type="button">Fit points</button></div>
+      <div class="map-terrain-key" aria-label="Terrain speed factors"><span><i class="map-terrain-sample slow"></i>Slow terrain · <strong>0.5×</strong></span><span><i class="map-terrain-sample normal"></i>Outside · <strong>1×</strong></span></div>
+    </div>
+    <div class="map-destination-picker"><span class="map-destination-label" id="map-destination-label">Show route</span><div id="map-targets" class="map-targets" role="group" aria-labelledby="map-destination-label"></div></div>
+    <p id="map-selection" class="sr-only"></p>
+    <details class="map-guide"><summary>Map guide</summary><div class="map-guide-content">
+      <div class="map-zone-legend" aria-label="Map zones"><span><i class="zone-badlands"></i>Badlands</span><span><i class="zone-plains"></i>Plains</span><span><i class="zone-fertile"></i>Fertile Land</span><span><i class="zone-ruin"></i>Ruin</span><span><i class="zone-alert"></i>Alert zone</span><span><i class="zone-core"></i>Core · no TCs</span></div>
+      <p>The amber shading and dashed border mark 0.5× terrain speed. Outside that border the factor is 1×, with no gradual slowdown. Dashed route sections use the same amber color.</p>
+      <p>Thin outlines mark the live tracker's zones. The Ruin zone outline extends one tile beyond the slow-terrain border on its north and east sides. Alert and Core mark separate areas; they do not add another slowdown.</p>
+      <p>Your TC covers four tiles in a 2 × 2 square. All four tiles must stay outside the hatched castle core. Other live obstacles and temporary Alert-zone restrictions are not shown.</p>
+      <p>Drag your TC or target to move it. Select a destination to see its route. Use Pan to move the map, the curved arrows to rotate by 45°, and Fit points to bring every destination into view.</p>
+      <p>Map positions mark movement centers. TC fields use the visible lower corner; its center is one tile higher on both axes. Target fields follow the chosen coordinate reference.</p>
+      <p id="map-keyboard-help">Keyboard: arrow keys move the map cursor; Enter places the point. On a movable footprint, arrows move that point. Hold Shift for ten-tile steps. Escape cancels a drag. Coordinate fields also work without dragging.</p>
+    </div></details>
+    <p id="map-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+  </div>
+</section>
+</div>
+      </section>
+    </div>
+    <section class="support" aria-label="Settings and help">
+      <details id="preset-settings"><summary><span>Castle & tower settings</span><span class="summary-note">Coordinates and names</span></summary><div class="details-content"><p>Use visible lower-corner coordinates. You can name the turrets Tower 1–4 to match your alliance.</p><div class="preset-grid" id="preset-fields"></div><p id="alias-error" class="field-error" role="status"></p><button class="button secondary" id="reset-presets" type="button">Restore defaults</button></div></details>
+      <details id="calculation-notes"><summary><span>Using the planner</span></summary><div class="details-content notes-grid"><div><h3>Choose the right trip</h3><p>Times cover travel. Rally preparation, fighting, gathering and construction are separate.</p><p>For a rally join, enter the leader’s town and your own bonuses. For a rally lead, enter the rally’s target.</p><p>Use this planner for the normal world map. Special maps, returns and recalls follow different rules.</p><p>The optional 30-second world-boss limit applies to activity 2940001.</p></div><div><h3>Bonuses and terrain</h3><p>Keep ordinary, hunting and pet bonuses in their separate fields. Built-in scout and mercenary bonuses are included automatically.</p><p>Ruin terrain applies a 0.5× speed multiplier; outside terrain applies 1×. Each terrain segment is rounded up before the times are added. Turn on raw seconds to see the total before rounding.</p><p>In-flight 25% and 50% items reduce time remaining. Do not add them to your march speed bonus.</p></div></div></details>
+    </section>
+    <div id="copy-fallback" hidden><label for="copy-text">Copy your travel times</label><textarea id="copy-text" readonly rows="8"></textarea></div>
+  </main>
+  <footer><span>KINGSHOT <span class="footer-slash">/</span> MARCH PLANNER</span><span>Works offline. Ready to share as one HTML file.</span></footer>
+  <div id="notice" class="notice" role="status" aria-live="polite"></div><noscript><p class="no-script">Enable JavaScript to calculate travel times.</p></noscript>
+</div>
+<script id="calculation-engine">
+/*
+ * Reference for the supplied Kingshot client's NORMAL-WORLD PvP march preview.
+ * This is not an implementation of verified fractional server time.
+ * No dependencies, network access, DOM access, or game-code execution.
+ * Browser: MarchCalculation.calculateFromVisible({...})
+ * Node: require('./march-calculation-reference.js')
+ * Verification: node march-calculation-reference.js --verify
+ */
+const MarchCalculation = (() => {
+  'use strict';
+  const CENTRAL = Object.freeze({ x1: 552, y1: 552, x2: 647, y2: 647 });
+  const PRESETS = Object.freeze({
+    castle: Object.freeze({ name: 'Castle', visible: [597, 597], center: [600, 600] }),
+    south: Object.freeze({ name: 'South Turret', visible: [594, 594], center: [595, 595] }),
+    west: Object.freeze({ name: 'West Turret', visible: [594, 604], center: [595, 605] }),
+    east: Object.freeze({ name: 'East Turret', visible: [604, 594], center: [605, 595] }),
+    north: Object.freeze({ name: 'North Turret', visible: [604, 604], center: [605, 605] })
+  });
+  const OFFSETS = Object.freeze({ point: 0, town: 1, tower: 1, castle: 3 });
+  function finite(value, name) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) throw new TypeError(`${name} must be a finite number`);
+    return value;
+  }
+  function point(value, name) {
+    if (!Array.isArray(value) || value.length !== 2) throw new TypeError(`${name} must be [x, y]`);
+    return [finite(value[0], `${name}.x`), finite(value[1], `${name}.y`)];
+  }
+  function center(position, anchor) {
+    if (!Object.hasOwn(OFFSETS, anchor)) throw new RangeError('Anchor must be point, town, tower, or castle');
+    const p = point(position, 'position'), offset = OFFSETS[anchor];
+    return [p[0] + offset, p[1] + offset];
+  }
+  const same = (a, b) => a[0] === b[0] && a[1] === b[1];
+  const squaredDistance = (a, b) => Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2);
+  const distance = (a, b) => Math.pow(squaredDistance(a, b), 0.5);
+  const nearest = value => Math.floor(value + 0.5); // Matches client boundary-delta rounding, including negatives.
+  const inside = p => CENTRAL.x1 <= p[0] && p[0] <= CENTRAL.x2 && CENTRAL.y1 <= p[1] && p[1] <= CENTRAL.y2;
+  const cross = (a, b, c) => (a[0] - c[0]) * (b[1] - c[1]) - (a[1] - c[1]) * (b[0] - c[0]);
+  const onSegment = (value, a, b, p) => value === 0 && (p[0] - a[0]) * (p[0] - b[0]) <= 0 && (p[1] - a[1]) * (p[1] - b[1]) <= 0;
+
+  // Arithmetic and branch order translated from world_march_util prototype 5.
+  function intersection(a, b, c, d) {
+    const s1 = cross(a, b, c);
+    if (onSegment(s1, a, b, c)) return c;
+    const s2 = cross(a, b, d);
+    if (onSegment(s2, a, b, d)) return d;
+    if (s1 * s2 > 0) return null;
+    const s3 = cross(c, d, a);
+    if (onSegment(s3, c, d, a)) return a;
+    const s4 = s3 + s1 - s2;
+    if (onSegment(s4, c, d, b)) return b;
+    if (s3 * s4 > 0) return null;
+    const fraction = s3 / (s2 - s1);
+    return [a[0] + nearest(fraction * (b[0] - a[0])), a[1] + nearest(fraction * (b[1] - a[1]))];
+  }
+
+  // Preserves the client order: bottom edge, left edge, top edge, right edge.
+  function insideSegment(a, b) {
+    let first = inside(a) ? a : null;
+    let last = inside(b) ? b : null;
+    if (first && last) return [first, last];
+    const { x1, y1, x2, y2 } = CENTRAL;
+    const bl = [x1, y1], br = [x2, y1], tl = [x1, y2], tr = [x2, y2];
+    for (const [c, d] of [[bl, br], [bl, tl], [tl, tr], [br, tr]]) {
+      if (first && last) break;
+      const hit = intersection(a, b, c, d);
+      if (hit) {
+        if (!first) first = hit;
+        else if (!same(hit, first)) {
+          last = hit;
+          if (squaredDistance(a, first) > squaredDistance(a, last)) [first, last] = [last, first];
+        }
+      }
+    }
+    return first && last ? [first, last] : null;
+  }
+
+  function terrainSegments(from, to) {
+    const a = point(from, 'from'), b = point(to, 'to');
+    if (same(a, b)) throw new RangeError('Same-point routes are unsupported; no game behavior is asserted');
+    const inner = insideSegment(a, b);
+    if (!inner) return [{ start: a, end: b, terrainMultiplier: 1 }];
+    const [first, last] = inner, out = [];
+    if (!same(a, first)) out.push({ start: a, end: first, terrainMultiplier: 1 });
+    // Deliberately retain a zero-length inner segment if this client branch creates it.
+    out.push({ start: first, end: last, terrainMultiplier: 0.5 });
+    if (!same(last, b)) out.push({ start: last, end: b, terrainMultiplier: 1 });
+    return out;
+  }
+
+  function calculateCenters({ from, to, baseSpeed = 11, normalBonusPercent = 0, petEnabled = false, petBonusPercent = 0 }) {
+    finite(baseSpeed, 'baseSpeed'); finite(normalBonusPercent, 'normalBonusPercent'); finite(petBonusPercent, 'petBonusPercent');
+    if (baseSpeed <= 0 || normalBonusPercent < 0 || petBonusPercent < 0) throw new RangeError('Base speed must be positive and bonuses nonnegative');
+    if (typeof petEnabled !== 'boolean') throw new TypeError('petEnabled must be a boolean');
+    const effectiveSpeed = baseSpeed * (1 + normalBonusPercent / 100 + (petEnabled ? petBonusPercent / 100 : 0));
+    if (!Number.isFinite(effectiveSpeed)) throw new RangeError('Effective speed overflow');
+    const segments = terrainSegments(from, to).map(segment => {
+      const d = distance(segment.start, segment.end);
+      if (!Number.isFinite(d)) throw new RangeError('Coordinate distance overflow');
+      const adjustedDistance = d * 1300 / (1300 + d);
+      // Preserve the client's operation order for the actual time calculation.
+      const factor = 1300 / (d + 1300) * 30;
+      const unroundedSeconds = 5 + d * factor / (effectiveSpeed * segment.terrainMultiplier);
+      if (!Number.isFinite(unroundedSeconds)) throw new RangeError('March-time calculation exceeds numeric precision');
+      return { ...segment, distance: d, adjustedDistance, unroundedSeconds, previewSeconds: Math.ceil(unroundedSeconds) };
+    });
+    const totalSegmentDistance = segments.reduce((total, s) => total + s.distance, 0);
+    if (!(totalSegmentDistance > 0) || !Number.isFinite(totalSegmentDistance)) throw new RangeError('Route distance exceeds numeric precision');
+    for (const segment of segments) {
+      segment.distanceShareBasisPointsNearest = nearest(10000 * segment.distance / totalSegmentDistance);
+    }
+    return {
+      scope: 'supplied-client-preview', from: point(from, 'from'), to: point(to, 'to'), effectiveSpeed, segments,
+      unroundedModelSeconds: segments.reduce((total, s) => total + s.unroundedSeconds, 0),
+      clientPreviewSeconds: segments.reduce((total, s) => total + s.previewSeconds, 0)
+    };
+  }
+
+  function calculateFromVisible({ town, target, customTarget, ...speedInputs }) {
+    let to;
+    if (target === 'custom') {
+      if (!customTarget || !Object.hasOwn(customTarget, 'anchor')) throw new TypeError('Custom targets require an explicit anchor');
+      to = center(customTarget.position, customTarget.anchor);
+    } else {
+      if (!Object.hasOwn(PRESETS, target)) throw new RangeError('Choose castle, south, west, east, north, or custom');
+      to = PRESETS[target].center;
+    }
+    return calculateCenters({ ...speedInputs, from: center(town, 'town'), to });
+  }
+
+  return { CENTRAL, PRESETS, center, terrainSegments, calculateCenters, calculateFromVisible };
+})();
+globalThis.MarchCalculation = MarchCalculation;
+
+</script><script>globalThis.MarchCatalog={"actions":[{"key":"attack","label":"Attack"},{"key":"scout","label":"Scout"},{"key":"gather","label":"Gather"},{"key":"reinforce","label":"Reinforce"},{"key":"leadRally","label":"Lead rally"},{"key":"joinRally","label":"Join rally"},{"key":"camp","label":"Camp"},{"key":"build","label":"Build / repair"},{"key":"intelCombat","label":"Intel combat"}],"targets":{"town":{"key":"town","label":"Town","objectType":1,"width":2,"height":2,"centerOffset":[1.0,1.0],"maxCorner":[1198,1198]},"castle":{"key":"castle","label":"Castle","objectType":20,"width":6,"height":6,"centerOffset":[3.0,3.0],"maxCorner":[1194,1194]},"tower":{"key":"tower","label":"Tower","objectType":24,"width":2,"height":2,"centerOffset":[1.0,1.0],"maxCorner":[1198,1198]},"minorFort":{"key":"minorFort","label":"Facility (3×3)","objectType":23,"width":3,"height":3,"centerOffset":[1.5,1.5],"maxCorner":[1197,1197]},"middleFort":{"key":"middleFort","label":"Sanctuary","objectType":22,"width":6,"height":6,"centerOffset":[3.0,3.0],"maxCorner":[1194,1194]},"majorFort":{"key":"majorFort","label":"Fortress","objectType":21,"width":6,"height":6,"centerOffset":[3.0,3.0],"maxCorner":[1194,1194]},"allianceFlag":{"key":"allianceFlag","label":"Alliance banner","objectType":32,"width":1,"height":1,"centerOffset":[0.5,0.5],"maxCorner":[1199,1199]},"allianceHall":{"key":"allianceHall","label":"Alliance HQ","objectType":31,"width":3,"height":3,"centerOffset":[1.5,1.5],"maxCorner":[1197,1197]},"camp":{"key":"camp","label":"Camp","objectType":5,"width":1,"height":1,"centerOffset":[0.5,0.5],"maxCorner":[1199,1199]},"resource":{"key":"resource","label":"Resource tile","objectType":2,"width":1,"height":1,"centerOffset":[0.5,0.5],"maxCorner":[1199,1199]},"allianceResource":{"key":"allianceResource","label":"Alliance resource","objectType":39,"width":3,"height":3,"centerOffset":[1.5,1.5],"maxCorner":[1197,1197]},"monster":{"key":"monster","label":"Monster","objectType":3,"width":1,"height":1,"centerOffset":[0.5,0.5],"maxCorner":[1199,1199]},"terror":{"key":"terror","label":"Terror","objectType":4,"width":2,"height":2,"centerOffset":[1.0,1.0],"maxCorner":[1198,1198]},"bear":{"key":"bear","label":"Bear Hunt","objectType":33,"width":3,"height":3,"centerOffset":[1.5,1.5],"maxCorner":[1197,1197]},"eventBoss":{"key":"eventBoss","label":"Dreadwolf / event boss","objectType":101,"width":2,"height":2,"centerOffset":[1.0,1.0],"maxCorner":[1198,1198]},"mercenaryPlayer":{"key":"mercenaryPlayer","label":"Mercenary — player target","objectType":102,"width":1,"height":1,"centerOffset":[0.5,0.5],"maxCorner":[1199,1199]},"mercenaryAlliance":{"key":"mercenaryAlliance","label":"Mercenary — alliance target","objectType":103,"width":2,"height":2,"centerOffset":[1.0,1.0],"maxCorner":[1198,1198]},"worldBoss":{"key":"worldBoss","label":"World boss","objectType":105,"width":4,"height":4,"centerOffset":[2.0,2.0],"maxCorner":[1196,1196]},"emptyTile":{"key":"emptyTile","label":"Empty tile","objectType":0,"width":1,"height":1,"centerOffset":[0.5,0.5],"maxCorner":[1199,1199]},"trap":{"key":"trap","label":"Bear Hunt trap","objectType":33,"width":3,"height":3,"centerOffset":[1.5,1.5],"maxCorner":[1197,1197]},"intelMonster":{"key":"intelMonster","label":"Intel combat target","objectType":3,"width":1,"height":1,"centerOffset":[0.5,0.5],"maxCorner":[1199,1199]}},"options":[{"action":"attack","target":"town","actualType":2,"parentType":null,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"castle","actualType":20,"parentType":null,"destination":"castle","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"tower","actualType":21,"parentType":null,"destination":"tower","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"minorFort","actualType":13,"parentType":null,"destination":"minorFort","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"middleFort","actualType":15,"parentType":null,"destination":"middleFort","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"majorFort","actualType":17,"parentType":null,"destination":"majorFort","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"allianceFlag","actualType":10,"parentType":null,"destination":"allianceFlag","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"allianceHall","actualType":12,"parentType":null,"destination":"allianceHall","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"camp","actualType":6,"parentType":null,"destination":"camp","extraSeconds":3,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"monster","actualType":3,"parentType":null,"destination":"monster","extraSeconds":3,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"worldBoss","actualType":25,"parentType":null,"destination":"worldBoss","extraSeconds":3,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"attack","target":"mercenaryPlayer","actualType":502,"parentType":null,"destination":"mercenaryPlayer","extraSeconds":5,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":2000,"fixedBaseSpeed":null},{"action":"attack","target":"mercenaryAlliance","actualType":504,"parentType":null,"destination":"mercenaryAlliance","extraSeconds":5,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":2000,"fixedBaseSpeed":null},{"action":"scout","target":"town","actualType":1,"parentType":null,"destination":"town","extraSeconds":2,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"castle","actualType":22,"parentType":null,"destination":"castle","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"tower","actualType":23,"parentType":null,"destination":"tower","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"minorFort","actualType":14,"parentType":null,"destination":"minorFort","extraSeconds":2,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"middleFort","actualType":16,"parentType":null,"destination":"middleFort","extraSeconds":2,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"majorFort","actualType":18,"parentType":null,"destination":"majorFort","extraSeconds":2,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"allianceFlag","actualType":9,"parentType":null,"destination":"allianceFlag","extraSeconds":2,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"allianceHall","actualType":11,"parentType":null,"destination":"allianceHall","extraSeconds":2,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"camp","actualType":7,"parentType":null,"destination":"camp","extraSeconds":3,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"scout","target":"resource","actualType":8,"parentType":null,"destination":"resource","extraSeconds":2,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":400,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":11},{"action":"gather","target":"resource","actualType":4,"parentType":null,"destination":"resource","extraSeconds":3,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"gather","target":"allianceResource","actualType":110,"parentType":null,"destination":"allianceResource","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"reinforce","target":"town","actualType":5,"parentType":null,"destination":"town","extraSeconds":3,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"town","actualType":100,"parentType":null,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"castle","actualType":108,"parentType":null,"destination":"castle","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"tower","actualType":109,"parentType":null,"destination":"tower","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"minorFort","actualType":105,"parentType":null,"destination":"minorFort","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"middleFort","actualType":106,"parentType":null,"destination":"middleFort","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"majorFort","actualType":107,"parentType":null,"destination":"majorFort","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"allianceFlag","actualType":103,"parentType":null,"destination":"allianceFlag","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"allianceHall","actualType":104,"parentType":null,"destination":"allianceHall","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"terror","actualType":102,"parentType":null,"destination":"terror","extraSeconds":5,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"bear","actualType":411,"parentType":null,"destination":"bear","extraSeconds":5,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"eventBoss","actualType":501,"parentType":null,"destination":"eventBoss","extraSeconds":5,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"leadRally","target":"mercenaryPlayer","actualType":503,"parentType":null,"destination":"mercenaryPlayer","extraSeconds":5,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":2000,"fixedBaseSpeed":null},{"action":"camp","target":"emptyTile","actualType":6,"parentType":null,"destination":"emptyTile","extraSeconds":3,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"build","target":"allianceFlag","actualType":10,"parentType":null,"destination":"allianceFlag","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"build","target":"allianceHall","actualType":12,"parentType":null,"destination":"allianceHall","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"build","target":"trap","actualType":19,"parentType":null,"destination":"trap","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"intelCombat","target":"intelMonster","actualType":302,"parentType":null,"destination":"intelMonster","extraSeconds":3,"timeParameter":10,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"town","actualType":99,"parentType":100,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"castle","actualType":99,"parentType":108,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"tower","actualType":99,"parentType":109,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"minorFort","actualType":99,"parentType":105,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"middleFort","actualType":99,"parentType":106,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"majorFort","actualType":99,"parentType":107,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"allianceFlag","actualType":99,"parentType":103,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"allianceHall","actualType":99,"parentType":104,"destination":"town","extraSeconds":5,"timeParameter":30,"usesHuntingBonus":false,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"terror","actualType":99,"parentType":102,"destination":"town","extraSeconds":5,"timeParameter":10,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"bear","actualType":99,"parentType":411,"destination":"town","extraSeconds":5,"timeParameter":10,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"eventBoss","actualType":99,"parentType":501,"destination":"town","extraSeconds":5,"timeParameter":10,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null},{"action":"joinRally","target":"mercenaryPlayer","actualType":99,"parentType":503,"destination":"town","extraSeconds":5,"timeParameter":10,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":2000,"fixedBaseSpeed":null}],"qualifiedOptions":{"automaticMonster":{"action":"attack","target":"monster","actualType":24,"parentType":null,"destination":"monster","extraSeconds":5,"timeParameter":20,"usesHuntingBonus":true,"fixedScoutBonusPercent":0,"fixedMercenaryBonusPercent":0,"fixedBaseSpeed":null,"qualification":"Explicit-route helper estimate only. Auto-hunt setup has no fixed target and hides its time display."}}};
+globalThis.MarchZoneData={"zones":[{"id":"badlands","label":"Badlands","legendLabel":"Badlands","minX":0,"minY":0,"maxXExclusive":1200,"maxYExclusive":1200,"fill":"#d8d8d2","fillAlpha":1,"border":"#85745e","borderAlpha":0.18,"legendColor":"#d8d8d2"},{"id":"plains","label":"Plains","legendLabel":"Plains","minX":300,"minY":300,"maxXExclusive":900,"maxYExclusive":900,"fill":"#759267","fillAlpha":0.075,"border":"#607b57","borderAlpha":0.28,"legendColor":"#849d78"},{"id":"fertile","label":"Fertile Land","legendLabel":"Fertile","minX":450,"minY":450,"maxXExclusive":750,"maxYExclusive":750,"fill":"#558451","fillAlpha":0.09,"border":"#477346","borderAlpha":0.34,"legendColor":"#669260"},{"id":"ruins","label":"Ruin / grey zone","legendLabel":"Ruin","minX":552,"minY":552,"maxXExclusive":648,"maxYExclusive":648,"fill":"#756d67","fillAlpha":0.14,"border":"#625b56","borderAlpha":0.42,"legendColor":"#827a73"},{"id":"alert","label":"Alert / red zone","legendLabel":"Alert","minX":586,"minY":586,"maxXExclusive":614,"maxYExclusive":614,"fill":"#b64f4b","fillAlpha":0.15,"border":"#9e3d3a","borderAlpha":0.52,"legendColor":"#b65c57","permanentNoTownZone":false},{"id":"core","label":"Castle core","legendLabel":"Core","minX":594,"minY":594,"maxXExclusive":606,"maxYExclusive":606,"fill":"#43534e","fillAlpha":0.2,"border":"#31413c","borderAlpha":0.64,"legendColor":"#50605b","permanentNoTownZone":true}],"permanentTownExclusions":[{"id":"castle-core","label":"Castle core — no towns","minX":594,"minY":594,"maxXExclusive":606,"maxYExclusive":606,"test":"any positive-area footprint overlap"}]};
+/* Normal-world client-preview rules from KS20260918.
+ * Requires the existing MarchCalculation geometry engine; no network or DOM access.
+ * Raw seconds are model estimates, not verified fractional server durations.
+ */
+const MarchTypes = (() => {
+  'use strict';
+
+  // Only the caller-verified normal-world catalog, plus qualified auto hunting.
+  const DIRECT_IDS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+    20, 21, 22, 23, 24, 25, 100, 102, 103, 104, 105, 106, 107, 108, 109, 110, 302, 411, 501, 502, 503, 504]);
+  const PARENTS = new Set([100, 102, 103, 104, 105, 106, 107, 108, 109, 411, 501, 503]);
+  const SCOUTS = new Set([1, 7, 8, 9, 11, 14, 16, 18, 22, 23]);
+  const HUNTING = new Set([3, 24, 25, 102, 302, 411, 501, 502, 503, 504]);
+  const MERCENARIES = new Set([502, 503, 504]);
+  const EXTRA = Object.freeze({ 1: 2, 3: 3, 4: 3, 5: 3, 6: 3, 7: 3, 8: 2, 9: 2, 11: 2,
+    14: 2, 16: 2, 18: 2, 25: 3, 302: 3 });
+  // Config defaults are resolved here. Nullish fallback preserves valid zero values.
+  const PARAMETERS = Object.freeze({
+    3: [20, 0], 24: [20, 0], 25: [20, 0], 102: [20, 10], 302: [10, 0],
+    411: [20, 10], 501: [20, 10], 502: [20, 0], 503: [20, 10], 504: [20, 0]
+  });
+
+  function finite(value, name) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) throw new TypeError(`${name} must be a finite number`);
+    return value;
+  }
+  function point(value, name) {
+    if (!Array.isArray(value) || value.length !== 2) throw new TypeError(`${name} must be [x, y]`);
+    return [finite(value[0], `${name}.x`), finite(value[1], `${name}.y`)];
+  }
+  function centerFromCorner(position, size) {
+    const p = point(position, 'position'), dimensions = point(size, 'size');
+    if (dimensions.some(value => value <= 0)) throw new RangeError('Object dimensions must be positive');
+    return [finite(p[0] + dimensions[0] / 2, 'center.x'), finite(p[1] + dimensions[1] / 2, 'center.y')];
+  }
+  function resolveProfile(marchType, parentType = null) {
+    if (!Number.isInteger(marchType) || (marchType !== 99 && !DIRECT_IDS.has(marchType))) {
+      throw new RangeError('Unsupported normal-world march type');
+    }
+    if (marchType === 99) {
+      if (!Number.isInteger(parentType) || !PARENTS.has(parentType)) throw new RangeError('Joining requires a supported parent rally type');
+    } else if (parentType !== null && parentType !== undefined && parentType !== 0) {
+      throw new RangeError('A parent rally type is only valid for joining a rally');
+    }
+    const speedType = marchType === 99 ? parentType : marchType;
+    return Object.freeze({
+      marchType, actualType: marchType, parentType: marchType === 99 ? parentType : null, speedType,
+      extraSeconds: EXTRA[marchType] ?? 5,
+      timeParameter: marchType === 99 ? (PARAMETERS[parentType]?.[1] ?? 30) : (PARAMETERS[marchType]?.[0] ?? 30),
+      usesHuntingBonus: HUNTING.has(speedType),
+      fixedScoutBonusPercent: SCOUTS.has(speedType) ? 400 : 0,
+      fixedMercenaryBonusPercent: MERCENARIES.has(speedType) ? 2000 : 0,
+      fixedBaseSpeed: SCOUTS.has(speedType) ? 11 : null
+    });
+  }
+  function calculateCenters({ from, to, marchType, parentType = null, baseSpeed = 11,
+    normalBonusPercent = 0, petEnabled = false, petBonusPercent = 0, huntingBonusPercent = 0, activityId = null }) {
+    const profile = resolveProfile(marchType, parentType);
+    const start = point(from, 'from'), finish = point(to, 'to');
+    finite(baseSpeed, 'baseSpeed');
+    for (const [name, value] of Object.entries({ normalBonusPercent, petBonusPercent, huntingBonusPercent })) {
+      finite(value, name);
+      if (value < 0) throw new RangeError('March bonuses must be nonnegative');
+    }
+    if (baseSpeed <= 0) throw new RangeError('Base speed must be positive');
+    if (typeof petEnabled !== 'boolean') throw new TypeError('petEnabled must be a boolean');
+    if (activityId !== null && (!Number.isSafeInteger(activityId) || activityId <= 0)) throw new RangeError('Activity ID must be a positive integer or null');
+    const generic = normalBonusPercent / 100 + (petEnabled ? petBonusPercent / 100 : 0);
+    const hunting = profile.usesHuntingBonus ? huntingBonusPercent / 100 : 0;
+    const base = profile.fixedBaseSpeed ?? baseSpeed;
+    // Source order: base * (1 + hunting + generic + scout + mercenary).
+    const effectiveSpeed = base * (1 + hunting + generic + profile.fixedScoutBonusPercent / 100 + profile.fixedMercenaryBonusPercent / 100);
+    if (!Number.isFinite(effectiveSpeed) || effectiveSpeed <= 0) throw new RangeError('Effective speed exceeds numeric precision');
+    const geometry = globalThis.MarchCalculation;
+    if (!geometry || typeof geometry.terrainSegments !== 'function') throw new Error('MarchCalculation geometry engine is required');
+    const segments = geometry.terrainSegments(start, finish).map(segment => {
+      const dx = segment.end[0] - segment.start[0], dy = segment.end[1] - segment.start[1];
+      const d = Math.pow(Math.pow(dx, 2) + Math.pow(dy, 2), 0.5);
+      if (!Number.isFinite(d)) throw new RangeError('Coordinate distance overflow');
+      const adjustedDistance = d * 1300 / (1300 + d);
+      const factor = 1300 / (1300 + d) * profile.timeParameter;
+      const unroundedSeconds = profile.extraSeconds + d * factor / (effectiveSpeed * segment.terrainMultiplier);
+      if (!Number.isFinite(unroundedSeconds)) throw new RangeError('March-time calculation exceeds numeric precision');
+      return { ...segment, distance: d, adjustedDistance, unroundedSeconds, previewSeconds: Math.ceil(unroundedSeconds) };
+    });
+    const totalDistance = segments.reduce((total, segment) => total + segment.distance, 0);
+    if (!(totalDistance > 0) || !Number.isFinite(totalDistance)) throw new RangeError('Route distance exceeds numeric precision');
+    for (const segment of segments) segment.distanceShareBasisPointsNearest = Math.floor(10000 * segment.distance / totalDistance + 0.5);
+    const unroundedModelSeconds = segments.reduce((total, segment) => total + segment.unroundedSeconds, 0);
+    const uncappedPreviewSeconds = segments.reduce((total, segment) => total + segment.previewSeconds, 0);
+    if (!Number.isFinite(unroundedModelSeconds) || !Number.isSafeInteger(uncappedPreviewSeconds)) throw new RangeError('Total march time exceeds numeric precision');
+    const capActive = marchType === 25 && activityId === 2940001;
+    const capSeconds = capActive ? 30 : null;
+    const clientPreviewSeconds = capActive ? Math.min(uncappedPreviewSeconds, capSeconds) : uncappedPreviewSeconds;
+    return {
+      scope: 'supplied-client-preview', from: start, to: finish, effectiveSpeed, segments,
+      unroundedModelSeconds, clientPreviewSeconds, profile, uncappedPreviewSeconds,
+      capActive, capApplied: clientPreviewSeconds < uncappedPreviewSeconds, capSeconds
+    };
+  }
+  return Object.freeze({ calculateCenters, resolveProfile, centerFromCorner });
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = MarchTypes;
+globalThis.MarchTypes = MarchTypes;
+
+/* Normal-world display zones and the permanent castle-core town exclusion.
+ * Separate from the verified time engine: rendering bounds never alter timing.
+ */
+(() => {
+  'use strict';
+  const data = globalThis.MarchZoneData;
+  const point = p => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite);
+  const zones = data.zones.map(zone => Object.freeze({
+    id:zone.id, label:zone.label, legendLabel:zone.legendLabel,
+    bounds:{x1:zone.minX,y1:zone.minY,x2:zone.maxXExclusive,y2:zone.maxYExclusive},
+    className:`map-zone-${zone.id === 'ruins' ? 'ruin' : zone.id}`, fill:zone.fill, fillAlpha:zone.fillAlpha,
+    border:zone.border, borderAlpha:zone.borderAlpha, legendColor:zone.legendColor,
+    noTowns:zone.permanentNoTownZone === true
+  }));
+  function townPlacement(center) {
+    if (!point(center)) return {valid:false,reason:'Enter both town coordinates.'};
+    const [cx,cy] = center;
+    if (cx < 1 || cy < 1 || cx > 1199 || cy > 1199) return {valid:false,reason:'All four town tiles must stay inside the map.'};
+    for (const zone of data.permanentTownExclusions) {
+      if (cx-1 < zone.maxXExclusive && cx+1 > zone.minX && cy-1 < zone.maxYExclusive && cy+1 > zone.minY) {
+        return {valid:false,reason:'A TC cannot overlap the castle core. Move all four tiles outside the hatched area.'};
+      }
+    }
+    return {valid:true,reason:''};
+  }
+  function zoneAt(center) {
+    if (!point(center)) return null;
+    return [...zones].reverse().find(({bounds:b}) => center[0]>=b.x1 && center[0]<b.x2 && center[1]>=b.y1 && center[1]<b.y2) || null;
+  }
+  function routeSpeedFactor(from,to) {
+    if (!point(from) || !point(to) || from.every((v,i) => v === to[i])) return null;
+    // Ratio of moving time with terrain removed to moving time with terrain.
+    // Fixed delays, rounding, activity caps, and common speed/C cancel or are
+    // excluded. The non-linear distance weights and exact segment split remain.
+    let ordinary = 0, actual = 0;
+    for (const segment of globalThis.MarchCalculation.terrainSegments(from,to)) {
+      const dx=segment.end[0]-segment.start[0], dy=segment.end[1]-segment.start[1];
+      const distance=Math.pow(Math.pow(dx,2)+Math.pow(dy,2),0.5);
+      const weight=distance*(1300/(1300+distance));
+      ordinary += weight;
+      actual += weight/segment.terrainMultiplier;
+    }
+    return actual > 0 && Number.isFinite(actual) ? Math.max(0.5,Math.min(1,ordinary/actual)) : null;
+  }
+  globalThis.MarchMapRules = Object.freeze({zones:Object.freeze(zones),townPlacement,zoneAt,routeSpeedFactor});
+})();
+
+(() => {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg';
+  const KEYS = ['castle', 'south', 'west', 'east', 'north', 'custom'];
+  const WIDTH = 800, HEIGHT = 500, MIN_SCALE = 0.000001, MAX_SCALE = 48, LIMIT = 1000000000;
+  const $ = id => document.getElementById(id);
+  const point = p => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite);
+  const supported = p => point(p) && p.every(n => Math.abs(n) <= LIMIT);
+  const same = (a, b) => point(a) && point(b) && a[0] === b[0] && a[1] === b[1];
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+  function activeKeys() { return Array.isArray(state.activeKeys) ? KEYS.filter(key => state.activeKeys.includes(key)) : KEYS; }
+  function active(key) { return key === 'town' || activeKeys().includes(key); }
+  function snapped(p, kind = mode) {
+    const constraint = state.placementConstraints?.[kind];
+    if (!constraint || !point(constraint.offset) || !point(constraint.min) || !point(constraint.max)) return p.map(n => clamp(Math.round(n), -LIMIT, LIMIT));
+    return p.map((n, axis) => clamp(Math.round(n - constraint.offset[axis]) + constraint.offset[axis], constraint.min[axis], constraint.max[axis]));
+  }
+  const coords = p => p.map(n => Number.isInteger(n) ? String(n) : String(Number(n.toFixed(3)))).join(', ');
+  let svg, nodes, handlers, targetButtons, initialized = false, resizeObserver;
+  let state = { from: null, destinations: {}, results: {}, format: n => `${n} s`, petEnabled: false, selectedTarget: 'castle' };
+  let view = { x: 600, y: 600, scale: 20 }, mode = 'town', gesture = null, cursor = null, placing = false;
+  let unit = 1, lastWidth = 0;
+  let rotation = 0, rotationKey, collapsed = false, collapseKey;
+  let invalidPlacement = null, cursorKind = 'town';
+
+  function el(name, attrs = {}, text) {
+    const node = document.createElementNS(NS, name);
+    for (const [key, value] of Object.entries(attrs)) {
+      node.setAttribute(key, String(value));
+      if (key === 'font-size') node.style.fontSize = `${value}px`;
+    }
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+  function html(name, className, text) {
+    const node = document.createElement(name);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+  // This orthogonal transform is its own inverse. At 0°, X points right and
+  // Y points up; positive angles turn the world clockwise without flattening it.
+  function transformDelta(p) {
+    const radians = rotation * Math.PI / 180;
+    const cosine = Math.cos(radians), sine = Math.sin(radians);
+    const c = Math.abs(cosine) < 1e-12 ? 0 : cosine, s = Math.abs(sine) < 1e-12 ? 0 : sine;
+    return [c * p[0] + s * p[1], s * p[0] - c * p[1]];
+  }
+  function project(p) {
+    const delta = transformDelta([p[0] - view.x, p[1] - view.y]);
+    return [WIDTH / 2 + delta[0] * view.scale, HEIGHT / 2 + delta[1] * view.scale];
+  }
+  function unproject(p) {
+    const delta = transformDelta([(p[0] - WIDTH / 2) / view.scale, (p[1] - HEIGHT / 2) / view.scale]);
+    return [view.x + delta[0], view.y + delta[1]];
+  }
+  function local(event) {
+    const matrix = svg.getScreenCTM();
+    if (matrix) {
+      const p = new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse());
+      return [p.x, p.y];
+    }
+    const box = svg.getBoundingClientRect();
+    return [(event.clientX - box.left) * WIDTH / box.width, (event.clientY - box.top) * HEIGHT / box.height];
+  }
+  function inView(p, margin = 0) {
+    return p.every(Number.isFinite) && p[0] >= -margin && p[0] <= WIDTH + margin && p[1] >= -margin && p[1] <= HEIGHT + margin;
+  }
+  function announce(message) { $('map-status').textContent = message; }
+  function speedTime(result) {
+    return result && !result.error && Number.isSafeInteger(result.clientPreviewSeconds) ? state.format(result.clientPreviewSeconds) : '—';
+  }
+  function summary(key, compact = false) {
+    const pair = state.results[key] || {};
+    if (!pair.normal || pair.normal.error) return pair.normal?.error || 'Add valid coordinates and speed inputs';
+    let value = `${compact ? '' : 'Normal '}${speedTime(pair.normal)}`;
+    if (state.petEnabled) value += `${compact ? ' · ' : ' · Pet '}${speedTime(pair.pet)}`;
+    return value;
+  }
+  function name(key) { return key === 'town' ? 'Your town' : state.destinations[key]?.name || (key === 'custom' ? 'Custom destination' : key); }
+  function worldPoint(key) { return key === 'town' ? state.from : state.destinations[key]?.to; }
+  function cleanView() {
+    view.x = clamp(view.x, -LIMIT, LIMIT); view.y = clamp(view.y, -LIMIT, LIMIT);
+    view.scale = clamp(view.scale, MIN_SCALE, MAX_SCALE);
+  }
+  function gridStep() {
+    // Nested 1, 2, 4, 8... tile divisions keep both axes aligned as we zoom.
+    const pixelsPerTile = view.scale * (lastWidth || WIDTH) / WIDTH;
+    return 2 ** Math.max(0, Math.ceil(Math.log2(6 / pixelsPerTile)));
+  }
+  function drawGrid() {
+    nodes.grid.replaceChildren();
+    const corners = [[0, 0], [WIDTH, 0], [WIDTH, HEIGHT], [0, HEIGHT]].map(unproject);
+    const minX = Math.max(0, Math.min(...corners.map(p => p[0]))), maxX = Math.min(1200, Math.max(...corners.map(p => p[0])));
+    const minY = Math.max(0, Math.min(...corners.map(p => p[1]))), maxY = Math.min(1200, Math.max(...corners.map(p => p[1])));
+    const step = gridStep();
+    for (const axis of [0, 1]) {
+      const min = axis === 0 ? minX : minY, max = axis === 0 ? maxX : maxY;
+      let count = 0;
+      for (let n = Math.ceil(min / step) * step; n <= max && count < 450; n += step, count++) {
+        const a = project(axis === 0 ? [n, minY] : [minX, n]);
+        const b = project(axis === 0 ? [n, maxY] : [maxX, n]);
+        const major = Math.round(n / step) % 4 === 0;
+        nodes.grid.append(el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: `map-grid-line${major ? ' map-grid-major' : ''}`, 'data-grid-coordinate': n, 'data-grid-axis': axis, 'vector-effect': 'non-scaling-stroke' }));
+      }
+    }
+    $('map-view-label').textContent = `${step === 1 ? '1 square = 1 tile' : `${step.toLocaleString()} tiles per square`} · bold every ${(step * 4).toLocaleString()} · TC 2 × 2`;
+    const scale = $('map-scale');
+    if (scale) {
+      const pixelsPerTile = view.scale * (lastWidth || WIDTH) / WIDTH;
+      let tiles = 4;
+      while (tiles * pixelsPerTile < 45) tiles *= 2;
+      scale.style.width = `${tiles * pixelsPerTile}px`;
+      scale.textContent = `${tiles} tiles`;
+    }
+  }
+  function drawZones() {
+    nodes.zones.replaceChildren();
+    const knownZones=window.MarchMapRules?.zones;
+    let slowTerrainDrawn=false;
+    function drawSlowTerrain() {
+      // Tracker outlines enclose complete map cells; timing uses the exact
+      // movement-center bounds. Keep the two visible boundaries separate.
+      const c=MarchCalculation.CENTRAL;
+      const corners=[[c.x1,c.y1],[c.x2,c.y1],[c.x2,c.y2],[c.x1,c.y2]].map(project);
+      const polygon=el('polygon',{points:corners.map(p=>p.join(',')).join(' '),class:'map-terrain-slow-zone','data-terrain-bounds':[c.x1,c.y1,c.x2,c.y2].join(','),'vector-effect':'non-scaling-stroke','pointer-events':'none'});
+      polygon.append(el('title',{},`Shaded slow terrain: X ${c.x1}–${c.x2}, Y ${c.y1}–${c.y2}. Terrain speed 0.5×; outside 1×.`));
+      nodes.zones.append(polygon);
+      slowTerrainDrawn=true;
+    }
+    if(Array.isArray(knownZones)) {
+      const labelBoxes=[];
+      for(const zone of knownZones) {
+        const b=zone.bounds;
+        if(!b||![b.x1,b.y1,b.x2,b.y2].every(Number.isFinite))continue;
+        const corners=[[b.x1,b.y1],[b.x2,b.y1],[b.x2,b.y2],[b.x1,b.y2]].map(project);
+        const isCore=zone.id==='core'||zone.className?.includes('zone-core');
+        const polygon=el('polygon',{points:corners.map(p=>p.join(',')).join(' '),class:`map-tracker-zone ${zone.className||''}`,'data-zone':zone.id,'vector-effect':'non-scaling-stroke','pointer-events':'none'});
+        polygon.append(el('title',{},`${zone.label}: X ${b.x1}–${b.x2}, Y ${b.y1}–${b.y2}${isCore?' · No towns':zone.speedMultiplier!==undefined?` · Local terrain speed ×${zone.speedMultiplier}`:''}`));
+        nodes.zones.append(polygon);
+        // Alert and core markings remain above the slow-terrain shading.
+        if(zone.id==='ruins')drawSlowTerrain();
+        if(isCore)nodes.zones.append(el('polygon',{points:corners.map(p=>p.join(',')).join(' '),fill:'url(#map-core-pattern)',class:'map-no-town-hatch','pointer-events':'none'}));
+        // Labels follow zone edges, remain horizontal, and stay separate from
+        // each other. The permanent legend covers borders outside the view.
+        const top=corners.reduce((a,p)=>p[1]<a[1]?p:a,corners[0]);
+        const mid=[(Math.min(...corners.map(p=>p[0]))+Math.max(...corners.map(p=>p[0])))/2,top[1]+14*unit];
+        if(view.scale<=4&&inView(mid, -12*unit)) {
+          const width=zone.label.length*6*unit,box={x:mid[0]-width/2,y:mid[1]-11*unit,w:width,h:16*unit};
+          if(!labelBoxes.some(other=>intersects(box,other))) {
+            nodes.zones.append(el('text',{x:mid[0],y:mid[1],class:'map-tracker-zone-label','text-anchor':'middle','font-size':10*unit,'pointer-events':'none'},zone.label));labelBoxes.push(box);
+          }
+        }
+      }
+    }
+    if(!slowTerrainDrawn)drawSlowTerrain();
+    // The world extent is [0,1200]; cell numbers are 0 through 1199.
+    const boundary = [[0, 0], [1200, 0], [1200, 1200], [0, 1200]].map(project);
+    const outline = el('polygon', { points: boundary.map(p => p.join(',')).join(' '), fill: 'none', stroke: 'var(--map-zone-edge)', 'stroke-width': 1.5, 'stroke-dasharray': '3 5', 'vector-effect': 'non-scaling-stroke', 'pointer-events': 'none', class: 'map-world-boundary' });
+    outline.append(el('title', {}, 'Normal world boundary. Map cells run from 0 to 1199 on each axis.'));
+    nodes.zones.append(outline);
+  }
+  function drawRoute() {
+    nodes.routes.replaceChildren();
+    const result = state.results[state.selectedTarget]?.normal;
+    if (!result || result.error || !point(state.from) || !state.destinations[state.selectedTarget]?.to) return;
+    for (const segment of result.segments || []) {
+      if (!supported(segment.start) || !supported(segment.end)) continue;
+      const a = project(segment.start), b = project(segment.end);
+      if (![...a, ...b].every(Number.isFinite)) continue;
+      const line = el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: segment.terrainMultiplier === 0.5 ? 'map-route-slow' : 'map-route-normal', 'vector-effect': 'non-scaling-stroke', 'data-terrain': segment.terrainMultiplier, 'data-start': segment.start.join(','), 'data-end': segment.end.join(',') });
+      line.append(el('title', {}, `${segment.terrainMultiplier === 0.5 ? 'Shaded terrain · 0.5×' : 'Outside shaded terrain · 1×'} · ${coords(segment.start)} → ${coords(segment.end)}`));
+      nodes.routes.append(el('line', { x1:a[0], y1:a[1], x2:b[0], y2:b[1], class:'map-route-underlay' }), line);
+      if (inView(b, 8)) nodes.routes.append(el('circle', { cx: b[0], cy: b[1], r: 3.5 * unit, class: 'map-route-node', 'vector-effect': 'non-scaling-stroke' }));
+    }
+  }
+  const intersects = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  function markerSize(key) {
+    if (key === 'town') return [2, 2];
+    const supplied = state.destinations[key]?.size;
+    if (point(supplied) && supplied.every(n => n > 0)) return supplied;
+    return key === 'castle' ? [6, 6] : key === 'custom' ? [1, 1] : [2, 2];
+  }
+  function markerKind(key) {
+    if (key === 'town' || state.destinations[key]?.isTown || state.destinations[key]?.spec?.destination === 'town') return 'town';
+    return key === 'castle' ? 'castle' : key === 'custom' ? 'custom' : 'tower';
+  }
+  function footprint(center, size) {
+    const [x, y] = center, [w, h] = size;
+    return [[x-w/2,y-h/2],[x+w/2,y-h/2],[x+w/2,y+h/2],[x-w/2,y+h/2]].map(project);
+  }
+  function footprintNode(center, size, className, relative = [0, 0]) {
+    return el('polygon', { points: footprint(center, size).map(p => [p[0]-relative[0],p[1]-relative[1]].join(',')).join(' '), class:className, 'vector-effect':'non-scaling-stroke', 'pointer-events':'none' });
+  }
+  function placementCheck(kind, center) {
+    if (kind !== 'town' && !(kind === 'custom' && markerKind(kind) === 'town')) return {valid:true};
+    return window.MarchMapRules?.townPlacement(center) || {valid:true};
+  }
+  function drawMarkers() {
+    const focusKey = document.activeElement?.getAttribute('data-map-marker');
+    nodes.markers.replaceChildren();
+    const list = ['castle', 'north', 'south', 'west', 'east', 'town', 'custom'].map(key => {
+      const fixed = key !== 'town' && key !== 'custom';
+      const world = worldPoint(key) || (fixed ? MarchCalculation.PRESETS[key]?.center : null);
+      return {key,world,interactive:active(key),size:markerSize(key)};
+    }).filter(m => supported(m.world)).map(m => ({...m, actual:project(m.world), screen:project(m.world)})).filter(m => inView(m.actual, 4 * view.scale));
+    const labelBoxes = [...nodes.zones.querySelectorAll('.map-tracker-zone-label')].map(label=>{const box=label.getBBox();return {x:box.x,y:box.y,w:box.width,h:box.height};}), markerBoxes = list.map(m => {
+      const corners=footprint(m.world,m.size), xs=corners.map(p=>p[0]), ys=corners.map(p=>p[1]);
+      m.box={x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};
+      return m.box;
+    });
+    // Every visible footprint stays at its true coordinate and scale. Only
+    // text labels may move to avoid overlap; hit areas may be larger on touch.
+    const prioritized = [...list].sort((a, b) => (b.key === state.selectedTarget ? 3 : b.key === 'town' ? 2 : 1) - (a.key === state.selectedTarget ? 3 : a.key === 'town' ? 2 : 1));
+    for (const marker of prioritized) {
+      const key = marker.key, selected = key === state.selectedTarget && marker.interactive, movable = key === 'town' || key === 'custom';
+      const kind = markerKind(key), pair = state.results[key] || {};
+      const title = key === 'town' ? 'Your TC' : state.destinations[key]?.name || MarchCalculation.PRESETS[key]?.name || name(key);
+      const time = key === 'town' ? `${coords(marker.world)} · 2 × 2 tiles` : selected && pair.normal && !pair.normal.error ? summary(key) : '';
+      const attrs = { class:`map-marker map-footprint-marker${selected ? ' is-selected' : ''}`, transform:`translate(${marker.screen.join(' ')})`, 'data-kind':kind, 'data-map-center':marker.world.join(','), 'data-footprint':marker.size.join(','), 'aria-label':`${title}. ${marker.size.join(' by ')} tiles. Movement center ${coords(marker.world)}.${key === 'town' ? '' : ` ${summary(key)}.`}${movable ? ' Drag or use arrow keys to move; hold Shift for ten steps.' : marker.interactive ? ' Press Enter to select.' : ''}` };
+      if (marker.interactive) Object.assign(attrs, {tabindex:0,role:'button','data-map-marker':key,'aria-pressed':String(selected)});
+      else Object.assign(attrs, {'data-map-landmark':key,'aria-hidden':'true'});
+      const g=el('g',attrs);
+      g.append(el('title',{},`${title} · ${marker.size.join(' × ')} tiles · center ${coords(marker.world)}`));
+      if (marker.interactive) {
+        const hitW=Math.max(marker.box.w,28*unit),hitH=Math.max(marker.box.h,28*unit);
+        g.append(el('rect',{x:-hitW/2,y:-hitH/2,width:hitW,height:hitH,fill:'transparent',stroke:'none',class:'map-marker-hit','pointer-events':'all'}));
+      }
+      g.append(footprintNode(marker.world,marker.size,'map-footprint-fill',marker.screen));
+      if (view.scale / unit >= 3) {
+        const [w,h]=marker.size;
+        for (let col=0;col<w;col++) for (let row=0;row<h;row++) {
+          const center=[marker.world[0]-w/2+col+.5,marker.world[1]-h/2+row+.5];
+          const cell=footprintNode(center,[1,1],'map-footprint-cell',marker.screen);
+          cell.dataset.cell=`${col},${row}`;g.append(cell);
+        }
+      }
+      g.append(footprintNode(marker.world,marker.size,'map-footprint-outline',marker.screen));
+      if (kind !== 'town' && view.scale / unit >= 5) {
+        const letter=key==='castle'?'C':{north:'N',south:'S',west:'W',east:'E'}[key];
+        if(letter) g.append(el('text',{x:0,y:4*unit,'text-anchor':'middle','font-size':11*unit,class:'map-footprint-letter','pointer-events':'none'},letter));
+      }
+      if (view.scale >= 4 * unit || selected || key === 'town') {
+        const label=title,font=11*unit,lineHeight=15*unit;
+        const width=Math.min(270*unit,Math.max(label.length*font*.55,time.length*font*.51))+10*unit;
+        const height=time?lineHeight*2+4*unit:lineHeight+5*unit, pad=7*unit;
+        const choices=key==='town'?[[-1,0],[-1,1],[0,-1],[0,1],[1,0]]:key==='north'?[[0,-1],[1,-1],[-1,-1],[1,0],[0,1]]:key==='south'?[[0,1],[1,1],[-1,1],[1,0],[0,-1]]:[[1,0],[1,1],[-1,0],[0,-1],[0,1]];
+        for(const [dx,dy] of choices) {
+          const box={x:marker.screen[0]+(dx>0?marker.box.w/2+pad:dx<0?-marker.box.w/2-pad-width:-width/2),y:marker.screen[1]+(dy<0?-marker.box.h/2-pad-height:dy>0?marker.box.h/2+pad:-height/2),w:width,h:height};
+          if(box.x<5*unit||box.y<5*unit||box.x+width>WIDTH-5*unit||box.y+height>HEIGHT-5*unit||labelBoxes.some(b=>intersects(box,b))||markerBoxes.some(b=>intersects(box,b))) continue;
+          labelBoxes.push(box);
+          const x=box.x-marker.screen[0],y=box.y-marker.screen[1];
+          g.append(el('rect',{x,y,width,height,rx:3*unit,class:'map-label-backdrop','pointer-events':'none'}));
+          g.append(el('text',{x:x+5*unit,y:y+font+2*unit,class:'map-marker-label','font-size':font,'pointer-events':'none'},label));
+          if(time)g.append(el('text',{x:x+5*unit,y:y+font+lineHeight+2*unit,class:'map-marker-time','font-size':10*unit,'pointer-events':'none'},time));
+          break;
+        }
+      }
+      marker.element=g;
+    }
+    list.sort((a,b)=>Number(a.key===state.selectedTarget)-Number(b.key===state.selectedTarget)).forEach(m=>nodes.markers.append(m.element));
+    if(focusKey&&!gesture)nodes.markers.querySelector(`[data-map-marker="${focusKey}"]`)?.focus({preventScroll:true});
+  }
+  function drawCursor() {
+    nodes.cursor.replaceChildren();
+    if(!point(cursor)||mode==='pan'){ $('map-cursor-label').textContent='Center · X, Y';$('map-cursor-label').classList.remove('is-invalid');return; }
+    const kind=gesture?.type==='drag'?gesture.kind:cursorKind;
+    const check=placementCheck(kind,cursor), p=project(cursor);
+    if(inView(p)) {
+      const size=markerSize(kind);
+      const poly=footprintNode(cursor,size,`map-placement-preview${check.valid?'':' is-invalid'}`);
+      poly.dataset.valid=String(check.valid);poly.dataset.center=cursor.join(',');nodes.cursor.append(poly);
+      const r=4*unit;
+      nodes.cursor.append(el('path',{d:`M ${p[0]-r} ${p[1]} H ${p[0]+r} M ${p[0]} ${p[1]-r} V ${p[1]+r}`,class:'map-cursor-line','vector-effect':'non-scaling-stroke','pointer-events':'none'}));
+    }
+    $('map-cursor-label').textContent=`${check.valid?'Center':'Cannot place'} ${coords(cursor)}${check.valid?'':` · ${check.reason || 'Blocked area'}`}`;
+    $('map-cursor-label').classList.toggle('is-invalid',!check.valid);
+  }
+  function drawTargets() {
+    for (const key of KEYS) {
+      const button = targetButtons[key], dest = state.destinations[key], valid = point(dest?.to);
+      button.hidden = !active(key);
+      button.style.display = active(key) ? '' : 'none';
+      const onscreen = valid && supported(dest.to) && inView(project(dest.to));
+      button.setAttribute('aria-pressed', String(state.selectedTarget === key));
+      button.querySelector('.map-target-name').textContent = name(key);
+      button.title = !valid ? 'Add destination coordinates' : !onscreen ? 'Off view · use Fit points' : `Center ${coords(dest.to)}`;
+      button.setAttribute('aria-label', `Show route to ${name(key)}.${!valid ? ' Add destination coordinates.' : ` Center ${coords(dest.to)}.${onscreen ? '' : ' Off the current view.'}`}`);
+    }
+    const selected = state.destinations[state.selectedTarget];
+    $('map-selection').textContent = selected ? `Selected route: ${selected.name}${point(selected.to) ? `, center ${coords(selected.to)}` : ''}. ${summary(state.selectedTarget)}` : 'Choose a destination to inspect its route.';
+  }
+  function updateHint() {
+    $('map-help').textContent = mode === 'pan' ? 'Drag to move the view. Your coordinates stay fixed.' : mode === 'custom' ? `Tap to place ${name('custom').toLowerCase()}, or drag its footprint.` : 'Tap to place your TC, or drag its four tiles to move it.';
+  }
+  function paint() {
+    if (!initialized || collapsed) return;
+    const width = svg.getBoundingClientRect().width;
+    unit = clamp(WIDTH / (width || WIDTH), 1, 3.4); lastWidth = width;
+    cleanView(); drawGrid(); drawZones(); drawRoute(); drawMarkers(); drawCursor(); drawTargets();
+    $('map-zoom-in').disabled = view.scale >= MAX_SCALE;
+    $('map-zoom-out').disabled = view.scale <= MIN_SCALE;
+    svg.dataset.mapMode = mode;
+    svg.dataset.rotation = String(rotation);
+    if ($('map-angle')) $('map-angle').textContent = `${rotation}°`;
+  }
+  function setRotation(next) {
+    if (gesture) cancelGesture('Move cancelled. Original coordinates restored.');
+    rotation = ((next % 360) + 360) % 360;
+    try { localStorage.setItem(rotationKey, String(rotation)); } catch (_) { /* Storage is optional for an offline file. */ }
+    cursor = null;
+    paint();
+    announce(`Map rotation ${rotation} degrees clockwise. Coordinates and march times are unchanged.`);
+  }
+  function setMode(next) {
+    if (!['town', 'custom', 'pan'].includes(next) || (next === 'custom' && !active('custom'))) return;
+    if (gesture) cancelGesture('Move cancelled.');
+    mode = next;
+    cursorKind = next; invalidPlacement = null;
+    cursor = null;
+    document.querySelectorAll('button[data-map-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mapMode === mode)));
+    svg.dataset.mapMode = mode;
+    drawCursor(); updateHint();
+    announce(mode === 'pan' ? 'Drag the map to pan. Your coordinates will stay the same.' : `Click the map to place ${name(mode)}. You can also use the coordinate fields.`);
+  }
+  function zoom(factor) {
+    if (gesture) cancelGesture('Move cancelled.');
+    view.scale = clamp(view.scale * factor, MIN_SCALE, MAX_SCALE); paint();
+    announce('Map zoom changed. Coordinates are unchanged.');
+  }
+  function closeup() {
+    if (gesture) cancelGesture('Move cancelled.');
+    const castle = state.destinations.castle?.to;
+    const center = supported(castle) ? castle : [600, 600];
+    view = { x: center[0], y: center[1], scale: 20 }; cursor = null; paint();
+    announce('Castle close-up.');
+  }
+  function overview() {
+    if (gesture) cancelGesture('Move cancelled.');
+    view = { x: 600, y: 600, scale: 1.25 }; cursor = null; paint();
+    announce('Zone overview: fertile land, ruin, alert zone and the castle core.');
+  }
+  function wholeMap() {
+    if(gesture)cancelGesture('Move cancelled.');
+    const corners=[[0,0],[1200,0],[1200,1200],[0,1200]].map(transformDelta);
+    const width=Math.max(...corners.map(p=>p[0]))-Math.min(...corners.map(p=>p[0]));
+    const height=Math.max(...corners.map(p=>p[1]))-Math.min(...corners.map(p=>p[1]));
+    view={x:600,y:600,scale:Math.min((WIDTH-40*unit)/width,(HEIGHT-48*unit)/height)};
+    cursor=null;paint();announce('Whole normal-world map, with all six tracker zones.');
+  }
+  function fit() {
+    if (gesture) cancelGesture('Move cancelled.');
+    const points = [state.from, ...activeKeys().map(key => state.destinations[key]?.to)].filter(supported);
+    if (!points.length) { overview(); return; }
+    const projected = points.map(transformDelta);
+    const a = projected.map(p => p[0]), b = projected.map(p => p[1]);
+    const minA = Math.min(...a), maxA = Math.max(...a), minB = Math.min(...b), maxB = Math.max(...b);
+    const midA = (minA + maxA) / 2, midB = (minB + maxB) / 2;
+    const center = transformDelta([midA, midB]);
+    view = { x: center[0], y: center[1], scale: Math.min(20, (WIDTH - 150 * unit) / Math.max(1, maxA - minA), (HEIGHT - 130 * unit) / Math.max(1, maxB - minB)) };
+    cursor = null; paint();
+    const omitted = [state.from, ...activeKeys().map(key => state.destinations[key]?.to)].some(p => point(p) && !supported(p));
+    announce(omitted ? 'Fitted supported points. Some coordinates are outside the map range; their values are unchanged.' : 'Fitted the town and all valid destinations.');
+  }
+  function commit(kind, center, snap = true) {
+    if (!active(kind)) return false;
+    cursorKind = kind;
+    const next = snap ? snapped(center, kind) : [...center];
+    const check = snap ? placementCheck(kind, next) : {valid:true};
+    if (!check.valid) {
+      invalidPlacement={kind,center:next,reason:check.reason || 'This area cannot hold a town.'};
+      cursor=next;drawCursor();announce(`${invalidPlacement.reason} Your previous position is unchanged.`);
+      return false;
+    }
+    invalidPlacement=null;placing=true;
+    let accepted;
+    try { accepted = handlers.onPlace(kind,next) !== false; }
+    finally { placing=false; }
+    if(!accepted)invalidPlacement={kind,center:next,reason:'That position could not be placed.'};
+    return accepted;
+  }
+  function select(key) {
+    if (!activeKeys().includes(key)) return;
+    handlers.onSelect(key);
+    announce(`${name(key)} selected. ${summary(key)}.`);
+  }
+  function endCapture() {
+    const old = gesture; gesture = null;
+    svg.classList.remove('is-dragging');
+    if (old && svg.hasPointerCapture(old.id)) svg.releasePointerCapture(old.id);
+    return old;
+  }
+  function cancelGesture(message) {
+    const old = endCapture();
+    if (!old) return;
+    if (old.type === 'drag' && old.moved && !same(old.original, old.last)) commit(old.kind, old.original, false);
+    if (old.type === 'pan') view = { ...old.view };
+    cursor = null; paint();
+    if (message) announce(message);
+  }
+  function pointerDown(event) {
+    if (event.button !== 0 || gesture || event.isPrimary === false) return;
+    const pos = local(event), marker = event.target.closest('[data-map-marker]');
+    if (!inView(pos)) return;
+    event.preventDefault();
+    const key = marker?.getAttribute('data-map-marker'), original = key ? worldPoint(key) : null;
+    const movable = key === 'town' || key === 'custom';
+    const type = movable && supported(original) ? 'drag' : key ? 'target' : mode === 'pan' ? 'pan' : 'place';
+    cursorKind = movable ? key : mode; invalidPlacement = null;
+    const under = unproject(pos);
+    gesture = { id: event.pointerId, type, key, kind: movable ? key : mode, start: pos, clientStart: [event.clientX, event.clientY], view: { ...view }, original: point(original) ? [...original] : null, last: point(original) ? [...original] : null, offset: point(original) ? [original[0] - under[0], original[1] - under[1]] : [0, 0], moved: false };
+    svg.classList.toggle('is-dragging', type === 'drag' || type === 'pan');
+    cursor = snapped(under, gesture.kind);
+    svg.setPointerCapture(event.pointerId);
+    svg.focus({ preventScroll: true });
+    drawCursor();
+  }
+  function pointerMove(event) {
+    if (event.isPrimary === false || (gesture && gesture.id !== event.pointerId)) return;
+    const pos = local(event);
+    if (!gesture) { cursorKind = mode; cursor = inView(pos) ? snapped(unproject(pos)) : null; drawCursor(); return; }
+    event.preventDefault();
+    const g = gesture;
+    if (Math.hypot(event.clientX - g.clientStart[0], event.clientY - g.clientStart[1]) > 4) g.moved = true;
+    if (g.type === 'pan' && g.moved) {
+      const delta = transformDelta([(pos[0] - g.start[0]) / g.view.scale, (pos[1] - g.start[1]) / g.view.scale]);
+      view.x = g.view.x - delta[0]; view.y = g.view.y - delta[1];
+      cursor = null; paint(); return;
+    }
+    const world = unproject(pos);
+    cursor = snapped(g.type === 'drag' ? [world[0] + g.offset[0], world[1] + g.offset[1]] : world, g.kind);
+    if (g.type === 'drag' && g.moved && !same(cursor, g.last)) {
+      if (g.kind === 'custom' && state.selectedTarget !== 'custom') handlers.onSelect('custom');
+      if (commit(g.kind, cursor)) g.last = [...cursor];
+    }
+    drawCursor();
+  }
+  function pointerUp(event) {
+    if (!gesture || gesture.id !== event.pointerId) return;
+    event.preventDefault();
+    const pos = local(event), g = endCapture();
+    if (Math.hypot(event.clientX - g.clientStart[0], event.clientY - g.clientStart[1]) > 4) g.moved = true;
+    const within = inView(pos);
+    if (g.type === 'drag') {
+      if (g.moved && !invalidPlacement) announce(`${name(g.kind)} moved to center ${coords(g.last)}.`);
+      else if (g.kind === 'custom') select('custom');
+    } else if (g.type === 'target' && !g.moved && within) select(g.key);
+    else if (g.type === 'place' && !g.moved && within) {
+      cursor = snapped(unproject(pos), g.kind);
+      if (commit(g.kind, cursor)) {
+        if (g.kind === 'custom') select('custom');
+        announce(`${name(g.kind)} placed at center ${coords(cursor)}.`);
+      }
+    } else if (g.type === 'pan') announce('Map moved. Coordinates are unchanged.');
+    else if (g.type === 'place' && g.moved) announce('Coordinates unchanged. Click or tap to place a point; use Pan to move the map.');
+    paint();
+  }
+  function keyDown(event) {
+    const key = event.key, marker = event.target.closest('[data-map-marker]')?.getAttribute('data-map-marker');
+    if (key === 'Escape') { if (gesture) { event.preventDefault(); cancelGesture('Move cancelled. Original coordinates restored.'); } return; }
+    const directions = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    // Diagonal views use diagonal grid steps, so Shift is exactly ten ordinary
+    // key presses and both coordinates remain on the integer placement grid.
+    const delta = directions[key] ? transformDelta(directions[key]).map(Math.round) : null;
+    const movable = marker === 'town' || marker === 'custom';
+    if (delta) {
+      event.preventDefault();
+      if (gesture) cancelGesture('Move cancelled.');
+      const step = event.shiftKey ? 10 : 1;
+      if (movable && supported(worldPoint(marker))) {
+        const p = worldPoint(marker); cursor = snapped([p[0] + delta[0] * step, p[1] + delta[1] * step], marker);
+        const committed = commit(marker, cursor);
+        if (marker === 'custom' && state.selectedTarget !== 'custom') handlers.onSelect('custom');
+        ensureCursorVisible(); paint();
+        nodes.markers.querySelector(`[data-map-marker="${marker}"]`)?.focus({ preventScroll: true });
+        if (committed) announce(`${name(marker)} center ${coords(cursor)}.`);
+      } else if (!marker) {
+        if (mode === 'pan') {
+          const amount = step * Math.max(1, 20 * unit / view.scale);
+          view.x += delta[0] * amount; view.y += delta[1] * amount; cursor = null; paint();
+        } else {
+          const p = cursor || snapped([view.x, view.y]);
+          cursor = snapped([p[0] + delta[0] * step, p[1] + delta[1] * step]); ensureCursorVisible(); paint();
+          announce(`Placement center ${coords(cursor)}. Press Enter to place ${name(mode)}.`);
+        }
+      }
+    } else if (key === 'Enter' || key === ' ') {
+      event.preventDefault();
+      if (marker && marker !== 'town') select(marker);
+      else if (!marker && mode !== 'pan') {
+        cursor = snapped(cursor || [view.x, view.y]);
+        if (commit(mode, cursor)) {
+          if (mode === 'custom') select('custom');
+          announce(`${name(mode)} placed at center ${coords(cursor)}.`);
+        }
+      }
+    } else if (!marker && (key === '+' || key === '=' || key === '-')) { event.preventDefault(); zoom(key === '-' ? 1 / 1.5 : 1.5); }
+    else if (!marker && key === 'Home') { event.preventDefault(); closeup(); }
+  }
+  function ensureCursorVisible() {
+    if (cursor && !inView(project(cursor), -30 * unit)) { view.x = cursor[0]; view.y = cursor[1]; }
+  }
+  function setCollapsed(next, persist = true) {
+    if (gesture) cancelGesture('Move cancelled.');
+    collapsed=!!next;
+    $('map-content').hidden=collapsed;
+    $('map-collapse').setAttribute('aria-expanded',String(!collapsed));
+    $('map-collapse').textContent=collapsed?'Show map +':'Collapse −';
+    document.querySelector('.map-panel').classList.toggle('is-collapsed',collapsed);
+    if(persist)try { localStorage.setItem(collapseKey,String(collapsed)); } catch (_) {}
+    if(!collapsed)paint();
+  }
+  function init(callbacks) {
+    if (initialized) return;
+    svg = $('march-map-svg');
+    if (!svg) return;
+    rotationKey = `march-map-rotation-${document.documentElement.dataset.edition || 'normal'}`;
+    collapseKey = `march-map-collapsed-${document.documentElement.dataset.edition || 'normal'}`;
+    try { collapsed = localStorage.getItem(collapseKey) === 'true'; } catch (_) {}
+    try {
+      const stored = localStorage.getItem(rotationKey);
+      if (stored !== null && /^(0|45|90|135|180|225|270|315)$/.test(stored)) rotation = Number(stored);
+    } catch (_) { /* Use the unrotated top-down view when storage is blocked. */ }
+    handlers = callbacks;
+    nodes = { grid: $('map-grid'), zones: $('map-zones'), routes: $('map-routes'), markers: $('map-markers'), cursor: $('map-cursor') };
+    targetButtons = {};
+    $('map-targets').replaceChildren();
+    for (const key of KEYS) {
+      const button = html('button', 'map-target-button');
+      button.type = 'button'; button.dataset.mapTarget = key;
+      button.append(html('span', 'map-target-name'));
+      button.addEventListener('click', () => select(key));
+      targetButtons[key] = button; $('map-targets').append(button);
+    }
+    $('map-targets').addEventListener('keydown', event => {
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      const current = event.target.closest('[data-map-target]');
+      if (!current) return;
+      const keys = activeKeys(), index = keys.indexOf(current.dataset.mapTarget);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? keys.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + keys.length) % keys.length;
+      event.preventDefault(); select(keys[next]); targetButtons[keys[next]].focus();
+    });
+    svg.setAttribute('tabindex', '0');
+    svg.setAttribute('role', 'group');
+    svg.setAttribute('aria-label', 'Interactive march map. Arrow keys move the placement cursor; Enter places a point. Shift moves ten steps. Use Pan to move the view. Coordinate fields and destination buttons also work without dragging.');
+    svg.style.touchAction = 'none';
+    svg.addEventListener('pointerdown', pointerDown);
+    svg.addEventListener('pointermove', pointerMove);
+    svg.addEventListener('pointerup', pointerUp);
+    svg.addEventListener('pointercancel', event => { if (gesture?.id === event.pointerId) cancelGesture('Move cancelled. Original coordinates restored.'); });
+    svg.addEventListener('lostpointercapture', event => { if (gesture?.id === event.pointerId) cancelGesture('Move cancelled. Original coordinates restored.'); });
+    svg.addEventListener('pointerleave', () => { if (!gesture) { cursor = null; drawCursor(); } });
+    svg.addEventListener('keydown', keyDown);
+    window.addEventListener('blur', () => { if (gesture) cancelGesture('Move cancelled. Original coordinates restored.'); });
+    document.querySelectorAll('button[data-map-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.mapMode)));
+    $('map-zoom-in').addEventListener('click', () => zoom(1.5));
+    $('map-zoom-out').addEventListener('click', () => zoom(1 / 1.5));
+    $('map-closeup').addEventListener('click', closeup);
+    $('map-zones-view').addEventListener('click', overview);
+    $('map-whole-world').addEventListener('click',wholeMap);
+    $('map-fit').addEventListener('click', fit);
+    $('map-rotate-left')?.addEventListener('click', () => setRotation(rotation - 45));
+    $('map-rotate-right')?.addEventListener('click', () => setRotation(rotation + 45));
+    $('map-reset-rotation')?.addEventListener('click', () => setRotation(0));
+    $('map-collapse').addEventListener('click',()=>setCollapsed(!collapsed));
+    initialized = true; setMode('town'); setCollapsed(collapsed,false); paint();
+    if (typeof ResizeObserver === 'function') {
+      resizeObserver = new ResizeObserver(() => { if (Math.abs(svg.getBoundingClientRect().width - lastWidth) > .5) paint(); });
+      resizeObserver.observe(svg);
+    } else window.addEventListener('resize', paint);
+  }
+  function render(next) {
+    if (!placing && !gesture) {
+      // A form change or example replaces any pending map placement.
+      cursor = null; invalidPlacement = null;
+      if ($('map-status')) $('map-status').textContent = '';
+    }
+    const previousKeys = activeKeys().join(','), previousConstraints = JSON.stringify(state.placementConstraints || null);
+    state = { ...state, ...next };
+    const keys = activeKeys();
+    if (!keys.includes(state.selectedTarget)) state.selectedTarget = keys[0] || null;
+    if (typeof state.format !== 'function') state.format = n => `${n} s`;
+    const changedPlacement = previousKeys !== keys.join(',') || previousConstraints !== JSON.stringify(state.placementConstraints || null);
+    if (changedPlacement) {
+      // A new action or object size owns the new coordinates. Abandon a stale
+      // gesture without writing its old coordinates into the newly chosen type.
+      if (gesture) endCapture();
+      cursor = null;
+    }
+    if (mode === 'custom' && !active('custom')) setMode('town');
+    const customMode = document.querySelector('button[data-map-mode="custom"]');
+    if (customMode) {
+      customMode.disabled = !active('custom');
+      customMode.textContent = 'Place target';
+      customMode.setAttribute('aria-label', `Place ${name('custom')}`);
+    }
+    updateHint();
+    if (gesture?.type === 'drag' && !placing && !same(worldPoint(gesture.kind), gesture.last)) {
+      // A field edit wins over an unfinished drag. Never restore over the new field value.
+      endCapture(); cursor = null;
+    }
+    paint();
+  }
+  window.MarchMap = Object.freeze({ init, render });
+})();
+
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const allKeys = ['castle', 'south', 'west', 'east', 'north', 'custom'];
+  const presetKeys = allKeys.slice(0, 5), touched = new Set();
+  const catalog = globalThis.MarchCatalog;
+  let keys = allKeys, visibleKeys = allKeys, results = {}, destinations = {}, noticeTimer, troopBase = '11', wasScout = false, destinationMode;
+  let timeFormat = 'seconds';
+  try { if (localStorage.getItem('march-time-format') === 'minutes-seconds') timeFormat = 'minutes-seconds'; } catch {}
+  try { $('show-raw').checked = localStorage.getItem('march-show-raw') === 'true'; } catch {}
+  const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+  const coord = p => p.map(String).join(', ');
+  const actionLabel = () => catalog.actions.find(a => a.key === $('march-action').value).label;
+  const targetLabel = () => $('march-target').selectedOptions[0]?.textContent || '';
+  const isJoin = () => $('march-action').value === 'joinRally';
+  const isComparison = () => $('march-target').value === 'comparison';
+  const choice = target => catalog.options.find(o => o.action === $('march-action').value && o.target === target);
+  function customChoice() {
+    const value = isComparison() ? $('comparison-kind').value : $('march-target').value;
+    if ($('march-action').value === 'attack' && value === 'monster' && $('auto-hunt').checked) return catalog.qualifiedOptions.automaticMonster;
+    return choice(value);
+  }
+  const customObject = () => catalog.targets[customChoice().destination];
+  const customPrefix = () => isJoin() ? 'leader' : 'custom';
+  const customReference = () => $(`${customPrefix()}-anchor`).value;
+  function notify(text) { clearTimeout(noticeTimer); $('notice').textContent = text; noticeTimer = setTimeout(() => $('notice').textContent = '', 2500); }
+
+  const media = matchMedia('(prefers-color-scheme: dark)');
+  function setThemeState() {
+    const theme = document.documentElement.dataset.theme || (media.matches ? 'dark' : 'light');
+    document.documentElement.classList.toggle('is-dark', theme !== 'light');
+    document.querySelectorAll('[data-theme-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === theme)));
+  }
+  document.querySelectorAll('[data-theme-choice]').forEach(button => button.addEventListener('click', () => {
+    document.documentElement.dataset.theme = button.dataset.themeChoice;
+    try { localStorage.setItem(`march-theme-${document.documentElement.dataset.edition}`, button.dataset.themeChoice); } catch {}
+    setThemeState();
+  }));
+  media.addEventListener('change', setThemeState); setThemeState();
+  $('march-action').innerHTML = catalog.actions.map(a => `<option value="${a.key}">${esc(a.label)}</option>`).join('');
+  function populateTargets() {
+    const previous = $('march-target').value, action = $('march-action').value;
+    const options = catalog.options.filter(o => o.action === action);
+    const comparison = ['attack','scout','leadRally'].includes(action);
+    $('march-target').innerHTML = (comparison ? '<option value="comparison">Castle & towers</option>' : '') + options.map(o => `<option value="${o.target}">${esc(catalog.targets[o.target].label)}</option>`).join('');
+    if ([...$('march-target').options].some(o => o.value === previous)) $('march-target').value = previous;
+  }
+  populateTargets();
+  $('preset-fields').innerHTML = presetKeys.map(key => {
+    const p = MarchCalculation.PRESETS[key];
+    return `<div class="preset-block"><h3>${p.name}</h3><div class="field-pair">${['x','y'].map((axis,i) => `<div class="field"><label for="preset-${key}-${axis}">${p.name} ${axis.toUpperCase()}</label><input id="preset-${key}-${axis}" type="number" step="any" inputmode="decimal" value="${p.visible[i]}" aria-describedby="preset-${key}-${axis}-error"><span class="field-error" id="preset-${key}-${axis}-error"></span></div>`).join('')}</div><p class="preset-center" id="preset-${key}-center"></p>${key !== 'castle' ? `<div class="field alias-field"><label for="alias-${key}">Optional tower name</label><select id="alias-${key}" aria-describedby="alias-error"><option value="">Native name</option>${[1,2,3,4].map(i => `<option value="${i}">Tower ${i}</option>`).join('')}</select></div>` : ''}</div>`;
+  }).join('');
+
+  function number(id, options = {}) {
+    const el = $(id), text = el.value.trim(), value = Number(text);
+    let error = '';
+    if (!text) error = 'Enter a number.';
+    else if (!Number.isFinite(value)) error = 'Use a finite number.';
+    else if (options.positive && value <= 0) error = 'Must be greater than zero.';
+    else if (options.nonnegative && value < 0) error = 'Use zero or a positive number.';
+    else if (options.min !== undefined && (value < options.min || value > options.max)) error = `Use ${options.min} to ${options.max} for this object.`;
+    const show = !!error && (touched.has(id) || text !== '' || options.showEmpty);
+    el.setAttribute('aria-invalid', String(show));
+    const message = $(`${id}-error`); if (message) message.textContent = show ? error : '';
+    if (options.min !== undefined) { el.min = options.min; el.max = options.max; }
+    return error ? null : value;
+  }
+  function readPosition(prefix, object, reference, showEmpty = false) {
+    const size = [object.width, object.height], offset = reference === 'point' ? [0,0] : size.map(n => n / 2);
+    const limits = size.map(n => reference === 'point' ? [n/2,1200-n/2] : [0,1200-n]);
+    const values = ['x','y'].map((axis,i) => number(`${prefix}-${axis}`, {min:limits[i][0],max:limits[i][1],showEmpty}));
+    const valid = values.every(v => v !== null);
+    const center = valid ? values.map((v,i) => v + offset[i]) : null;
+    const placement = center && object.key === 'town' ? MarchMapRules.townPlacement(center) : {valid:true,reason:''};
+    const errorNode = $(`${prefix}-placement-error`);
+    if (errorNode) errorNode.textContent = placement.reason;
+    if (!placement.valid) ['x','y'].forEach(axis => $(`${prefix}-${axis}`).setAttribute('aria-invalid','true'));
+    return { visible:valid ? values : null, to:placement.valid ? center : null, offset, size, anchor:reference, isTown:object.key === 'town', placementError:placement.reason };
+  }
+  function displayName(key) {
+    if (key === 'custom') return isJoin() ? 'Rally leader’s town' : isComparison() ? `Custom ${$('comparison-kind').value}` : catalog.targets[customChoice().target].label;
+    const alias = key !== 'castle' && $(`alias-${key}`).value;
+    return alias ? `Tower ${alias}` : MarchCalculation.PRESETS[key].name;
+  }
+  function readDestination(key) {
+    const custom = key === 'custom', spec = custom ? customChoice() : choice(key === 'castle' ? 'castle' : 'tower');
+    const object = catalog.targets[spec.destination];
+    const prefix = custom ? customPrefix() : `preset-${key}`, reference = custom ? customReference() : 'corner';
+    const optionalEmpty = custom && isComparison() && ['x','y'].every(axis => !$(`${prefix}-${axis}`).value.trim());
+    let position;
+    if (optionalEmpty) {
+      ['x','y'].forEach(axis => { $(`${prefix}-${axis}`).setAttribute('aria-invalid','false'); $(`${prefix}-${axis}-error`).textContent = ''; });
+      $(`${prefix}-placement-error`).textContent = '';
+      const size = [object.width,object.height];
+      position = {visible:null,to:null,size,offset:reference === 'point' ? [0,0] : size.map(n => n/2),anchor:reference,isTown:object.key === 'town',placementError:''};
+    } else position = readPosition(prefix,object,reference,custom && isComparison());
+    if (!custom) $(`preset-${key}-center`).textContent = position.to ? `Center: ${coord(position.to)}` : 'Enter valid coordinates.';
+    return { name:displayName(key), native:custom ? '' : MarchCalculation.PRESETS[key].name, ...position, spec };
+  }
+  function human(seconds) { return `${Math.floor(seconds/60)}m ${String(seconds%60).padStart(2,'0')}s`; }
+  function displayTime(seconds) { return timeFormat === 'minutes-seconds' ? `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}` : String(seconds); }
+  function timeWithUnit(seconds) { return `${displayTime(seconds)}${timeFormat === 'seconds' ? ' s' : ' (m:ss)'}`; }
+  function updateTimeFormat() {
+    document.querySelectorAll('[data-time-format]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.timeFormat === timeFormat)));
+    $('estimates').dataset.displayFormat = timeFormat;
+    $('time-display-key').textContent = `Travel time in ${timeFormat === 'seconds' ? 'seconds' : 'minutes and seconds'}.`;
+    $('time-format-note').textContent = timeFormat === 'seconds' ? 'Seconds' : 'Minutes:seconds';
+    $('estimates').dataset.rawVisible = String($('show-raw').checked);
+    $('raw-display-key').hidden = !$('show-raw').checked;
+  }
+  function updateMarchFields() {
+    const spec = customChoice(), object = customObject(), join = isJoin(), comparison = isComparison();
+    const scout = spec.fixedBaseSpeed !== null;
+    if (scout && !wasScout) { troopBase = $('base-speed').value; $('base-speed').value = '11'; }
+    else if (!scout && wasScout) $('base-speed').value = troopBase;
+    wasScout = scout;
+    $('base-speed').disabled = scout;
+    $('base-help').textContent = scout ? 'Scouts use base speed 11. The 400% scout bonus is included.' : 'Speed at 0% bonus, using your slowest troop. Default: 11.';
+    $('speed-rule').textContent = spec.fixedMercenaryBonusPercent ? 'The built-in 2000% mercenary bonus is included automatically.' : '';
+    $('hunting-fields').hidden = !spec.usesHuntingBonus;
+    $('custom-section').hidden = join;
+    $('leader-section').hidden = !join;
+    $('comparison-kind-field').hidden = !comparison;
+    $('preset-settings').hidden = !comparison;
+    $('auto-fields').hidden = !($('march-action').value === 'attack' && $('march-target').value === 'monster');
+    $('boss-fields').hidden = spec.actualType !== 25;
+    $('march-target-label').textContent = join ? 'Rally target' : 'Target';
+    $('destination-title').textContent = comparison ? 'Custom destination' : `${object.label} coordinates`;
+    $('destination-optional').textContent = comparison ? 'Optional' : 'Required';
+    const nextDestinationMode = comparison ? 'comparison' : `${$('march-action').value}:${$('march-target').value}`;
+    if (!comparison && !join && nextDestinationMode !== destinationMode) $('destination-settings').open = true;
+    destinationMode = nextDestinationMode;
+    $('destination-help').textContent = customReference() === 'point' ? 'Enter the center used for movement.' : `Use the visible lower corner of this ${object.width} × ${object.height} target.`;
+    $('march-help').textContent = join ? 'Time from your town to the rally leader. The rally target determines the travel rules.' : {
+      attack:'Travel to the target before battle.', scout:'Travel to the target for scouting.', gather:'Travel to the resource. Gathering time is separate.', reinforce:'Travel to another player’s town.', leadRally:'The leader’s travel to the target. Rally preparation is separate.', camp:'Travel to an empty tile to set up camp.', build:'Travel to build or repair the structure. Work time is separate.', intelCombat:'Travel to an intel combat target on the world map.'
+    }[$('march-action').value];
+    const capActive = spec.actualType === 25 && $('boss-activity').value === '2940001';
+    $('raw-display-key').textContent = capActive ? 'Raw seconds show the total before rounding and the activity cap.' : 'Raw seconds are the total before rounding.';
+    $('result-action-label').textContent = `${actionLabel()} · ${targetLabel().replace(' · compare all','')}`;
+    const notes = [];
+    if (join) notes.push('Travel to the rally leader’s town.');
+    if ($('auto-hunt').checked && !$('auto-fields').hidden) notes.push('Automatic hunting: travel time to this target.');
+    if (capActive) notes.push('30-second activity cap applied.');
+    $('march-context').innerHTML = notes.join(' ');
+    $('march-context').hidden = notes.length === 0;
+    document.querySelector('button[data-map-mode="custom"]').textContent = join ? 'Place leader' : 'Place target';
+    return spec;
+  }
+  function calculation(from, dest, speed, petEnabled) {
+    if (from[0] === dest.to[0] && from[1] === dest.to[1]) return { error:'Choose a different destination.' };
+    try {
+      const result = MarchTypes.calculateCenters({from,to:dest.to,...speed,petEnabled,marchType:dest.spec.actualType,parentType:dest.spec.parentType,activityId:dest.spec.actualType === 25 && $('boss-activity').value ? Number($('boss-activity').value) : null});
+      if (!Number.isSafeInteger(result.clientPreviewSeconds) || !Number.isFinite(result.unroundedModelSeconds)) return {error:'Result exceeds reliable numeric precision.'};
+      return result;
+    } catch { return {error:'Values exceed the supported calculation range.'}; }
+  }
+  function cell(result, missing, state) {
+    if (result?.error) return `<td class="${state}-cell"><div class="cell-error">${esc(result.error)}</div></td>`;
+    if (!result) return `<td class="${state}-cell" title="${esc(missing)}"><div class="empty-value" aria-label="${esc(missing)}">—</div></td>`;
+    return `<td class="${state}-cell" title="${esc(human(result.clientPreviewSeconds))}"><div class="time-value"><span data-seconds="${result.clientPreviewSeconds}">${displayTime(result.clientPreviewSeconds)}</span>${timeFormat === 'seconds' ? '<span class="unit">s</span>' : ''}</div><div class="raw"><span class="raw-label">${result.capActive ? 'Uncapped raw' : 'Raw'} </span><span data-raw="${result.unroundedModelSeconds}">${result.unroundedModelSeconds}</span><span> s</span></div>${result.capApplied ? '<div class="cap-note">30 s activity cap</div>' : ''}<span class="sr-only">${esc(human(result.clientPreviewSeconds))}</span></td>`;
+  }
+  function refresh() {
+    $('copy-fallback').hidden = true;
+    const spec = updateMarchFields();
+    updateTimeFormat();
+    const origin = readPosition('town', catalog.targets.town, 'corner');
+    const from = origin.to;
+    const bonus = number('normal-bonus', {nonnegative:true}), baseSpeed = number('base-speed', {positive:true});
+    const huntingBonus = spec.usesHuntingBonus ? number('hunting-bonus', {nonnegative:true}) : 0;
+    const pet = $('pet-enabled').checked;
+    $('pet-fields').hidden = !pet;
+    $('estimates').dataset.pet = String(pet);
+    const petBonus = pet ? number('pet-bonus', {nonnegative:true,showEmpty:true}) : 0;
+    $('origin-center').innerHTML = `Center <span>${from ? esc(coord(from)) : '—, —'}</span>`;
+    const valid = from && bonus !== null && baseSpeed !== null && huntingBonus !== null;
+    const speed = {baseSpeed,normalBonusPercent:bonus,petBonusPercent:petBonus ?? 0,huntingBonusPercent:huntingBonus};
+    keys = isComparison() ? allKeys : ['custom'];
+    const customEmpty = isComparison() && !$('custom-x').value.trim() && !$('custom-y').value.trim();
+    visibleKeys = keys.filter(key => key !== 'custom' || !customEmpty);
+    results = {}; destinations = {};
+    $('pet-header-state').textContent = pet ? petBonus !== null ? `+${petBonus}%` : 'ADD BONUS' : 'OFF';
+    keys.forEach(key => {
+      const dest = readDestination(key); destinations[key] = dest;
+      const normal = valid && dest.to ? calculation(from,dest,speed,false) : null;
+      const buffed = pet && petBonus !== null && valid && dest.to ? calculation(from,dest,speed,true) : null;
+      results[key] = {normal,pet:buffed};
+    });
+    const selected = $('inspect-target').value;
+    $('inspect-target').innerHTML = keys.map(key => `<option value="${key}">${esc(destinations[key].name)}</option>`).join('');
+    $('inspect-target').value = keys.includes(selected) ? selected : keys[0];
+    $('target-rows').innerHTML = visibleKeys.map(key => {
+      const dest = destinations[key], normal = results[key].normal, buffed = results[key].pet;
+      const missing = origin.placementError ? 'Town overlaps a blocked area' : dest.placementError ? 'Town destination overlaps a blocked area' : !from ? 'Enter valid town X & Y' : !valid ? 'Check speed inputs' : `Enter valid ${isJoin() ? 'leader' : 'target'} X & Y`;
+      const native = dest.name !== dest.native && dest.native ? `<span class="native-name">${esc(dest.native)}</span>` : '';
+      const selectedTarget = key === $('inspect-target').value;
+      return `<tr data-target="${key}" data-march-type="${dest.spec.actualType}"${dest.spec.parentType ? ` data-parent-type="${dest.spec.parentType}"` : ''} class="${selectedTarget ? 'selected-target' : ''}"><td><div class="target-name"><button type="button" class="result-target" data-result-target="${key}" aria-pressed="${selectedTarget}" aria-label="Show route to ${esc(dest.name)}">${esc(dest.name)}</button>${native}</div><div class="target-coords" title="Movement center">${dest.to ? esc(coord(dest.to)) : 'Add coordinates'}</div></td>${cell(normal,missing,'normal')}${cell(buffed,!pet ? 'Pet buff off' : petBonus === null ? 'Enter pet bonus' : missing,'pet')}</tr>`;
+    }).join('');
+    const count = visibleKeys.filter(key => results[key].normal && !results[key].normal.error).length;
+    $('status-text').textContent = `${count} destination${count === 1 ? '' : 's'} ready${pet && petBonus !== null ? ' · Pet buff compared' : pet ? ' · Add a pet bonus to compare' : ''}`;
+    $('result-status').classList.toggle('ready',count > 0);
+    $('copy-results').disabled = count === 0;
+    $('target-count').textContent = count === visibleKeys.length ? 'Select a destination to see its route' : `${count} of ${visibleKeys.length} destinations ready`;
+    $('empty-results').hidden = count > 0;
+    $('results-table').hidden = count === 0;
+    $('raw-display-key').hidden = !$('show-raw').checked || count === 0;
+    $('estimates').classList.toggle('is-empty',count === 0);
+    if (!count) updateEmptyState(origin,valid);
+    updateRoute();
+    const object = customObject(), half = [object.width/2,object.height/2];
+    MarchMap.render({from,destinations,results,format:timeWithUnit,petEnabled:pet,selectedTarget:$('inspect-target').value,activeKeys:keys,placementConstraints:{town:{offset:[1,1],min:[1,1],max:[1199,1199]},custom:{offset:half,min:half,max:half.map(v => 1200-v)}}});
+  }
+  function updateEmptyState(origin,valid) {
+    let title = 'Add your town coordinates', help = 'Travel times update as you type.', mapMode = 'town';
+    if (origin.placementError) { title = 'Move your town outside the core'; help = 'Your 2 × 2 town cannot overlap the castle core.'; }
+    else if (!origin.to && ($('town-x').value || $('town-y').value)) { title = 'Check your town coordinates'; help = 'Enter valid X and Y coordinates, or place your town on the map.'; }
+    else if (origin.to && !valid) { title = 'Check your march bonuses'; help = 'Correct the highlighted speed or bonus fields to see travel times.'; mapMode = ''; }
+    else if (valid) {
+      const dest = destinations.custom;
+      title = isJoin() ? 'Add the rally leader’s coordinates' : 'Add your destination';
+      help = 'Enter both coordinates, or choose a point on the map.';
+      mapMode = 'custom';
+      if (dest?.placementError) { title = 'Move the destination town'; help = 'A town cannot overlap the castle core.'; }
+      else if (results.custom?.normal?.error) { title = 'Check this route'; help = results.custom.normal.error; }
+      else if (isComparison()) { title = 'Check destination coordinates'; help = 'Enter valid castle or tower coordinates in the settings below.'; mapMode = ''; }
+    }
+    $('empty-title').textContent = title;
+    $('empty-help').textContent = help;
+    $('empty-map').hidden = !mapMode;
+    $('empty-map').dataset.placementMode = mapMode;
+    $('empty-map').textContent = mapMode === 'town' ? 'Place your town on the map ↗' : isJoin() ? 'Place the leader on the map ↗' : 'Place the target on the map ↗';
+  }
+  function updateRoute() {
+    const key = $('inspect-target').value, pair = results[key], r = pair?.normal;
+    if (!r) { $('route-content').textContent = 'Add the destination coordinates to see this route.'; return; }
+    if (r.error) { $('route-content').textContent = r.error; return; }
+    $('route-content').innerHTML = `<div class="route-endpoints">${esc(coord(r.from))} → ${esc(coord(r.to))}</div><p>Town center to ${isJoin() ? 'leader’s town center' : 'destination center'} · ${r.segments.length} terrain segment${r.segments.length === 1 ? '' : 's'}</p><div class="segment-list">${r.segments.map((s,i) => `<div class="segment"><strong>${i+1}. ${s.terrainMultiplier === .5 ? 'Ruin terrain · 0.5× speed' : 'Outside ruins · 1× speed'}</strong><span>${s.distance.toFixed(2)} coordinate units</span><span>Normal: <strong>${timeWithUnit(s.previewSeconds)}</strong></span><span class="raw">Raw: <code>${s.unroundedSeconds} s</code></span>${pair.pet && !pair.pet.error ? `<span>With pet: <strong>${timeWithUnit(pair.pet.segments[i].previewSeconds)}</strong></span><span class="raw">Pet raw: <code>${pair.pet.segments[i].unroundedSeconds} s</code></span>` : ''}${s.distance === 0 ? '<span>Boundary segment · zero distance</span>' : ''}</div>`).join('')}</div><p>Each segment rounds up to a whole second before the times are added.${r.capActive ? ` The total is then capped at 30 seconds. Before the cap: ${timeWithUnit(r.uncappedPreviewSeconds)}.` : ''}</p>`;
+  }
+  function validateAliases(changed) {
+    const value = changed.value;
+    const duplicate = value && presetKeys.slice(1).find(key => $(`alias-${key}`) !== changed && $(`alias-${key}`).value === value);
+    if (duplicate) { changed.value = ''; $('alias-error').textContent = `Tower ${value} is already assigned to ${MarchCalculation.PRESETS[duplicate].name}. Choose another number.`; }
+    else $('alias-error').textContent = '';
+    for (const key of presetKeys.slice(1)) {
+      const select = $(`alias-${key}`);
+      for (const option of select.options) option.disabled = !!option.value && presetKeys.slice(1).some(other => other !== key && $(`alias-${other}`).value === option.value);
+    }
+  }
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('input', () => { touched.add(input.id); refresh(); });
+    input.addEventListener('blur', () => {
+      touched.add(input.id);
+      if (['custom-x','custom-y'].includes(input.id) && isComparison() && !$('custom-x').value.trim() && !$('custom-y').value.trim()) {
+        for (const axis of ['x','y']) { $(`custom-${axis}`).setAttribute('aria-invalid','false'); $(`custom-${axis}-error`).textContent = ''; }
+        $('custom-placement-error').textContent = '';
+        return;
+      }
+      // Values already recalculate on input. Validate this field without
+      // replacing the destination button that is about to receive focus.
+      const options = input.id === 'base-speed' ? {positive:true}
+        : input.id.endsWith('-bonus') ? {nonnegative:true}
+        : input.hasAttribute('min') && input.hasAttribute('max') ? {min:Number(input.min),max:Number(input.max)} : {};
+      number(input.id,options);
+      const placementError = $(`${input.id.replace(/-[xy]$/,'')}-placement-error`);
+      if (placementError?.textContent) input.setAttribute('aria-invalid','true');
+    });
+  });
+  $('march-action').addEventListener('change', () => { populateTargets(); refresh(); });
+  ['march-target','comparison-kind','pet-enabled','custom-anchor','leader-anchor','auto-hunt','boss-activity'].forEach(id => $(id).addEventListener('change',refresh));
+  $('show-raw').addEventListener('change', () => {
+    try { localStorage.setItem('march-show-raw',String($('show-raw').checked)); } catch {}
+    refresh();
+  });
+  document.querySelectorAll('[data-time-format]').forEach(button => button.addEventListener('click', () => {
+    timeFormat = button.dataset.timeFormat;
+    try { localStorage.setItem('march-time-format',timeFormat); } catch {}
+    refresh();
+  }));
+  $('inspect-target').addEventListener('change',refresh);
+  $('target-rows').addEventListener('click',event => {
+    const button = event.target.closest('[data-result-target]');
+    if (!button) return;
+    const key = button.dataset.resultTarget;
+    $('inspect-target').value = key;
+    refresh();
+    document.querySelector(`[data-result-target="${key}"]`)?.focus({preventScroll:true});
+  });
+  $('empty-map').addEventListener('click', () => {
+    if ($('map-collapse').getAttribute('aria-expanded') === 'false') $('map-collapse').click();
+    document.querySelector(`button[data-map-mode="${$('empty-map').dataset.placementMode}"]`)?.click();
+    $('battle-map').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',block:'start'});
+    $('map-collapse').focus({preventScroll:true});
+  });
+  presetKeys.slice(1).forEach(key => $(`alias-${key}`).addEventListener('change',event => {validateAliases(event.target);refresh();}));
+  $('reset-presets').addEventListener('click', () => {
+    for (const key of presetKeys) { ['x','y'].forEach((axis,i) => $(`preset-${key}-${axis}`).value = MarchCalculation.PRESETS[key].visible[i]); if (key !== 'castle') $(`alias-${key}`).value = ''; }
+    validateAliases($('alias-south')); refresh(); notify('Preset coordinates and names restored.');
+  });
+  $('example').addEventListener('click', () => {
+    // Keep the chosen march type so every action has a quick, useful example.
+    const values = {'town-x':590,'town-y':590,'normal-bonus':0,'base-speed':11,'hunting-bonus':0,'pet-bonus':30,'custom-x':610,'custom-y':600,'leader-x':600,'leader-y':590};
+    for (const [id,value] of Object.entries(values)) $(id).value = value;
+    troopBase = '11'; $('pet-enabled').checked = true;
+    refresh(); notify('Example loaded. Enter your own coordinates and bonuses.');
+  });
+  function resultText() {
+    const sample = Object.values(results).find(pair => pair.normal && !pair.normal.error)?.normal;
+    if (!sample) return '';
+    const lines = ['KINGSHOT · MARCH TIMES', `${actionLabel()} · ${targetLabel()}`, `Town lower corner: ${$('town-x').value}, ${$('town-y').value} · Center: ${coord(sample.from)}`, `Base speed: ${$('base-speed').value} · Normal bonus: ${$('normal-bonus').value}%`, `Pet: ${$('pet-enabled').checked ? `${$('pet-bonus').value || 'missing'}% additional bonus` : 'off'}`];
+    if (customChoice().usesHuntingBonus) lines.push(`Hunting bonus: ${$('hunting-bonus').value}% (including applicable heroes)`);
+    if (sample.profile.fixedScoutBonusPercent) lines.push('Built-in scout bonus: +400%');
+    if (sample.profile.fixedMercenaryBonusPercent) lines.push('Built-in mercenary bonus: +2000%');
+    if (isJoin()) lines.push('Travel to the rally leader, using your bonuses. Preparation and onward travel are separate.');
+    if ($('auto-hunt').checked && !$('auto-fields').hidden) lines.push('Automatic hunting: travel time to the selected target.');
+    if (customChoice().actualType === 25) lines.push(sample.capActive ? '30-second activity cap applied.' : 'No activity cap applied.');
+    lines.push(`Times in ${timeFormat === 'seconds' ? 'seconds' : 'minutes:seconds'}${$('show-raw').checked ? ' · Raw values in seconds' : ''}`, '');
+    const copiedTime = r => `${timeWithUnit(r.clientPreviewSeconds)}${$('show-raw').checked ? ` · ${r.capActive ? 'Uncapped raw' : 'Raw'}: ${r.unroundedModelSeconds} s` : ''}`;
+    for (const key of visibleKeys) {
+      const pair = results[key], dest = destinations[key];
+      if (!pair.normal || pair.normal.error) {lines.push(`${dest.name}: ${pair.normal?.error || 'Missing inputs'}`);continue;}
+      lines.push(`${dest.name} · center ${coord(dest.to)}`, `  Normal: ${copiedTime(pair.normal)}`);
+      if (pair.pet && !pair.pet.error) lines.push(`  Pet: ${copiedTime(pair.pet)}`);
+    }
+    return lines.join('\n');
+  }
+  $('copy-results').addEventListener('click',async () => {
+    const text = resultText();
+    try { if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable'); await navigator.clipboard.writeText(text); notify('March results copied.'); }
+    catch { $('copy-fallback').hidden = false; $('copy-text').value = text; $('copy-text').focus(); $('copy-text').select(); notify('Select and copy the results below.'); }
+  });
+  MarchMap.init({
+    onPlace(kind, center) {
+      const prefix = kind === 'town' ? 'town' : customPrefix();
+      const object = kind === 'town' ? catalog.targets.town : customObject();
+      if (object.key === 'town') {
+        const placement = MarchMapRules.townPlacement(center);
+        if (!placement.valid) { notify(placement.reason); return false; }
+      }
+      const reference = kind === 'town' ? 'corner' : customReference();
+      const offset = reference === 'point' ? [0,0] : [object.width/2,object.height/2];
+      ['x','y'].forEach((axis,i) => { const id = `${prefix}-${axis}`; $(id).value = center[i]-offset[i]; touched.add(id); });
+      if (kind === 'custom') { $('inspect-target').value = 'custom'; if (!isJoin()) $('destination-settings').open = true; }
+      refresh();
+      return true;
+    },
+    onSelect(key) { $('inspect-target').value = key; refresh(); }
+  });
+  refresh();
+})();
+</script>
+<div class="creator-credit" style="text-align:center;padding:12px 8px;color:#9aa6b2;font:12px system-ui,sans-serif">Originally created by <a href="https://github.com/Cblaze401/kingshot-rally-tools" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">Blaze K163</a></div>
+</body></html>

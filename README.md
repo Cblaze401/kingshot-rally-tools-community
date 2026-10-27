@@ -1,6 +1,6 @@
 # Kingshot Rally Tools
 
-Reinforcement Timer and March Command. Static HTML, CSS, and JavaScript — no build step or backend required.
+Reinforcement Timer, March Command, and March Planner. Static HTML, CSS, and JavaScript — no build step or backend required.
 
 **Originally created by Blaze K163.**
 
@@ -20,11 +20,11 @@ Netlify will guide you through copying the repository and deploying your site.
 4. Set **Build command** to blank and **Publish directory** to `.`; the provided `netlify.toml` specifies the directory too.
 5. Deploy and choose your site's address.
 
-Alternatively download the repository ZIP and upload the files to any static host. Keep `index.html`, `tabs.css`, `tabs.js`, `reinforcement/`, and `march-command/` together with the same directory structure. No installation or compilation is needed.
+Alternatively download the repository ZIP and upload the files to any static host. Keep `index.html`, `tabs.css`, `tabs.js`, `reinforcement/`, `march-command/`, and `march-planner/` together with the same directory structure. No installation or compilation is needed.
 
 ### Local preview
 
-Run `python -m http.server 8000` from the project directory and visit `http://localhost:8000/`. Reinforcement Timer and March Command are also accessible at `/reinforcement/` and `/march-command/`.
+Run `python -m http.server 8000` from the project directory and visit `http://localhost:8000/`. The three tools are also accessible at `/reinforcement/`, `/march-command/`, and `/march-planner/`. Open `/#march-planner` to select the March Planner tab directly.
 
 The root page switches between same-origin frames without reloading the tools; keep your browser open and device awake for timer cues. Tool settings are stored in your browser.
 

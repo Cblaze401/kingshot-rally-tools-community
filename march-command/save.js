@@ -4,7 +4,7 @@
   const status = document.getElementById('save-status');
   function save() {
     try {
-      localStorage.setItem(key, JSON.stringify({version:1, groups:state.groups, players:state.players, prep:$('prep').value}));
+      localStorage.setItem(key, JSON.stringify({version:1, petModel:'manual-times', groups:state.groups, players:state.players, prep:$('prep').value}));
       status.textContent = 'Setup saved automatically in this browser.';
     } catch { status.textContent = 'Saving is unavailable in this browser. Keep this tab open to keep your setup.'; }
   }
@@ -20,6 +20,11 @@
       if (new Set(ids).size !== ids.length) throw Error('Duplicate IDs');
       state.groups = saved.groups;
       state.players = saved.players;
+      // Preserve the roster and normal times; use only known measured defaults.
+      state.players.forEach(p => {
+        if (!scalar(p.petDuration)) p.petDuration = defaultPetMarch(p.duration);
+        p.pet = false;
+      });
       next = Math.max(10,...ids) + 1;
       $('prep').value = saved.prep;
       render();
@@ -32,6 +37,10 @@
       const obj = (el.dataset.p ? state.players : state.groups).find(x => x.id === Number(el.dataset.p || el.dataset.g));
       if (obj) obj[el.dataset.field] = el.type === 'checkbox' ? el.checked : el.dataset.field === 'group' ? Number(el.value) : el.value;
       update();
+      if (obj && ['duration','petDuration'].includes(el.dataset.field)) {
+        const summary = document.querySelector(`[data-pet-summary="${obj.id}"]`);
+        if (summary) summary.textContent = `March Speed Up: +${obj.pet?55:25}% · ${marchSummary(obj)}`;
+      }
     }
     save();
   });
