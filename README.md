@@ -31,3 +31,10 @@ The root page switches between same-origin frames without reloading the tools; k
 ## Creator credit and license
 
 Anyone who hosts a copy must retain the visibly displayed creator credit **Originally created by Blaze K163**, linking to this project's original GitHub URL. For complete terms, see [LICENSE.md](LICENSE.md). This is a custom source-available license, not an OSI-approved open-source license.
+
+
+## Rally presets
+
+In March Command, enter a preset name and choose **Save As** to save the current groups, player order, enabled selections, spacing, normal/pet march times, pet selections, and rally countdown. Choose a saved preset and press **Load** to switch setups, **Save** to update it, or **Delete** to remove it. Loading stops an active countdown; copy the schedule for fresh UTC rally call times.
+
+Presets are stored in this browser. **Export all** downloads a JSON backup to share or move to another device. **Import** adds presets without overwriting existing names. Loading a preset restores its pet selections; reopening March Command still starts Grizzly Bear OFF. Keep a backup before clearing browser data.

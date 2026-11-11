@@ -7,3 +7,4 @@
 [hidden]{display:none!important}
 
 .pet{flex-wrap:wrap}.pet .hint{flex-basis:100%;margin-left:26px;overflow-wrap:anywhere}
+.preset-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.preset-actions button{min-height:40px;padding:9px 14px;font-size:14px}.presets .hint{overflow-wrap:anywhere}@media(max-width:600px){.preset-fields{grid-template-columns:1fr}.preset-actions{gap:8px}.preset-actions button{flex:1 0 auto}}

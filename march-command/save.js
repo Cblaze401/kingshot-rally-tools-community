@@ -45,5 +45,6 @@
     save();
   });
   document.addEventListener('change', save);
+  document.addEventListener('march-setup-loaded', save);
   document.addEventListener('click', e => { if(e.target.closest('button')) save(); });
 })();
