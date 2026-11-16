@@ -6,3 +6,5 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 main{flex:1;min-height:0;height:auto}
 [role=tablist]{flex-wrap:wrap}
 @media(max-width:800px){.tools-header{height:auto;flex-direction:column;gap:12px;align-items:stretch;padding:12px 4%}.brand{display:flex;align-items:center;gap:12px}.brand small{font-size:10px}[role=tablist]{width:100%}[role=tab]{flex:1;min-width:0;padding:10px 8px;font-size:13px}main{height:auto}}
+
+@media(max-width:600px){[role=tablist]{display:grid;grid-template-columns:1fr 1fr}[role=tab]{width:100%}}
