@@ -43,19 +43,22 @@
       const data=await response.json();if(!response.ok)throw Error(data.error||'Locations are unavailable.');
       if(!Array.isArray(data.players))throw Error('Unexpected location response.');
       if(state.players!==roster||binding.some(([p,id])=>p.governorId!==id||!selectedPlayers().includes(p)))throw Error('The roster or target changed during lookup. Refresh again to use the new setup.');
-      let applied=0;
+      let applied=0, namesUpdated=0;
       for(const p of players){
         const l=data.players.find(row=>row.governorId===p.governorId);
         if(!l){positions.set(p.governorId,{message:'Missing or still updating; time kept'});continue}
         const location={...l};
+        // A known identity can be used even when its map location is stale.
+        const foundName=typeof l.name==='string'?l.name.trim().slice(0,120):'';
+        if(foundName && p.name!==foundName){p.name=foundName;namesUpdated++;}
         if(!Number.isInteger(l.x)||!Number.isInteger(l.y)||l.x<0||l.y<0||l.x>1199||l.y>1199)location.message='No valid location; time kept';
         else if(!Number.isSafeInteger(l.kingdom)||l.kingdom<1)location.message='Unknown kingdom; time kept';
         else if(l.fresh!==true||typeof l.ageSeconds!=='number'||l.ageSeconds<0||l.ageSeconds>60)location.message='Stale / updating; time kept';
         else {try{const times=castleTimes(l.x,l.y);num(times.normal,'Calculated normal time');num(times.pet,'Calculated pet time');p.duration=times.normal;p.petDuration=times.pet;location.times=times;location.message='Updated · estimated';applied++}catch{location.message='Cannot calculate route; time kept'}}
         positions.set(p.governorId,location);
       }
-      if(applied){render();document.dispatchEvent(new Event('march-setup-loaded'));}else draw();
-      status.textContent=`Updated ${applied} of ${players.length} callers. ${applied?'Check estimated times in-game. Save your preset to keep these changes.':'Existing march times kept. If an update is pending, refresh again in a minute.'}`;
+      if(applied||namesUpdated){render();document.dispatchEvent(new Event('march-setup-loaded'));}else draw();
+      status.textContent=`Updated ${namesUpdated} player name${namesUpdated===1?'':'s'} and march times for ${applied} of ${players.length} callers. ${applied?'Check estimated times in-game. Save your preset to keep these changes.':'Existing march times kept. If an update is pending, refresh again in a minute. Save your preset to keep any name changes.'}`;
     }catch(error){status.textContent=error.name==='TimeoutError'?'Lookup timed out. Existing march times kept.':error.message}
     finally{busy=false;refresh.disabled=false}
   };
