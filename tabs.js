@@ -1,5 +1,5 @@
 const toolTabs=[...document.querySelectorAll('[role="tab"]')];
-const toolHashes={'reinforcement-tab':'#reinforcement','march-tab':'#march-command','planner-tab':'#march-planner','caller-map-tab':'#caller-map'};
+const toolHashes={'reinforcement-tab':'#reinforcement','march-tab':'#march-command','planner-tab':'#march-planner','builder-tab':'#map-builder','caller-map-tab':'#caller-map'};
 const marchPanel=document.getElementById('march-panel'),marchFrame=marchPanel.querySelector('iframe');
 function syncMarchView(){
  const map=location.hash==='#caller-map';

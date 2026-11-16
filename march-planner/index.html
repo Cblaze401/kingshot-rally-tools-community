@@ -147,7 +147,6 @@ input,select,textarea,.button,.icon-button{border-color:var(--control-line)}inpu
   [data-theme="furion"] .intro:after{background:linear-gradient(90deg,#07110cf5 0%,#07110ce6 28%,#07110c60 52%,transparent 75%)}
 }
 </style>
-<link rel="stylesheet" href="city-roster.css">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to calculator</a>
@@ -194,8 +193,7 @@ input,select,textarea,.button,.icon-button{border-color:var(--control-line)}inpu
           <p class="raw-description" id="raw-display-key" hidden>Raw seconds are the total before rounding.</p><span id="time-display-key" class="sr-only"></span>
           <details class="route-details" id="route-details"><summary><span>Route details</span><span class="summary-note">Terrain & timing</span></summary><div class="details-content"><div class="field"><label for="inspect-target">Destination</label><select id="inspect-target"><option value="castle">Castle</option></select></div><div id="route-content"></div></div></details>
         </div>
-        <section id="city-roster" aria-label="Saved city roster"></section>
-<div id="battle-map"><section class="map-panel" aria-labelledby="map-title">
+        <div id="battle-map"><section class="map-panel" aria-labelledby="map-title">
   <div class="map-heading"><div><div class="eyebrow">ROUTE PLANNER</div><h3 id="map-title">Battle map</h3></div><button id="map-collapse" type="button" aria-expanded="true" aria-controls="map-content">Collapse −</button></div>
   <div id="map-content">
     <div class="map-toolbar">
@@ -559,20 +557,6 @@ globalThis.MarchTypes = MarchTypes;
   let unit = 1, lastWidth = 0;
   let rotation = 0, rotationKey, collapsed = false, collapseKey;
   let invalidPlacement = null, cursorKind = 'town';
-  let rosterCities = [];
-  function drawCities() {
-    let layer = svg.querySelector('#roster-map-layer');
-    if (!layer) { layer = el('g', {id:'roster-map-layer', 'pointer-events':'none'}); svg.append(layer); }
-    layer.replaceChildren();
-    for (const city of rosterCities) {
-      const p=project([city.x+1,city.y+1]);
-      if (!inView(p)) continue;
-      const g=el('g');
-      g.append(el('circle',{cx:p[0],cy:p[1],r:5*unit,fill:'var(--accent)',stroke:'var(--surface)','stroke-width':2*unit}));
-      g.append(el('text',{x:p[0]+9*unit,y:p[1]-8*unit,fill:'var(--ink)','font-size':12*unit,stroke:'var(--surface)','stroke-width':3*unit,'paint-order':'stroke'},city.name));
-      layer.append(g);
-    }
-  }
 
   function el(name, attrs = {}, text) {
     const node = document.createElementNS(NS, name);
@@ -848,7 +832,7 @@ globalThis.MarchTypes = MarchTypes;
     if (!initialized || collapsed) return;
     const width = svg.getBoundingClientRect().width;
     unit = clamp(WIDTH / (width || WIDTH), 1, 3.4); lastWidth = width;
-    cleanView(); drawGrid(); drawZones(); drawRoute(); drawMarkers(); drawCursor(); drawTargets(); drawCities();
+    cleanView(); drawGrid(); drawZones(); drawRoute(); drawMarkers(); drawCursor(); drawTargets();
     $('map-zoom-in').disabled = view.scale >= MAX_SCALE;
     $('map-zoom-out').disabled = view.scale <= MIN_SCALE;
     svg.dataset.mapMode = mode;
@@ -901,7 +885,7 @@ globalThis.MarchTypes = MarchTypes;
   }
   function fit() {
     if (gesture) cancelGesture('Move cancelled.');
-    const points = [...rosterCities.map(c=>[c.x+1,c.y+1]), state.from, ...activeKeys().map(key => state.destinations[key]?.to)].filter(supported);
+    const points = [state.from, ...activeKeys().map(key => state.destinations[key]?.to)].filter(supported);
     if (!points.length) { overview(); return; }
     const projected = points.map(transformDelta);
     const a = projected.map(p => p[0]), b = projected.map(p => p[1]);
@@ -1152,7 +1136,7 @@ globalThis.MarchTypes = MarchTypes;
     }
     paint();
   }
-  window.MarchMap = Object.freeze({ init, render, fit, setCities(cities) { rosterCities=cities; paint(); } });
+  window.MarchMap = Object.freeze({ init, render });
 })();
 
 (() => {
@@ -1486,7 +1470,6 @@ globalThis.MarchTypes = MarchTypes;
   });
   MarchMap.init({
     onPlace(kind, center) {
-      if (kind === 'town' && window.CityRoster?.placing()) return window.CityRoster.place(center);
       const prefix = kind === 'town' ? 'town' : customPrefix();
       const object = kind === 'town' ? catalog.targets.town : customObject();
       if (object.key === 'town') {
@@ -1506,5 +1489,4 @@ globalThis.MarchTypes = MarchTypes;
 })();
 </script>
 <div class="creator-credit" style="text-align:center;padding:12px 8px;color:#9aa6b2;font:12px system-ui,sans-serif">Originally created by <a href="https://github.com/Cblaze401/kingshot-rally-tools" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">Blaze K163</a></div>
-<script src="city-roster.js"></script>
 </body></html>
