@@ -20,7 +20,9 @@
     });
     const players = value.players.map(p => {
       if (!p || !groups.some(g => g.id === p.group)) fail('Player has an unknown group.');
-      return {id:id(p.id),name:name(p.name),duration:seconds(p.duration),petDuration:seconds(p.petDuration),group:p.group,on:bool(p.on),pet:bool(p.pet)};
+      const governorId = p.governorId ?? '';
+      if (typeof governorId !== 'string' || (governorId !== '' && !/^[1-9]\d{0,19}$/.test(governorId))) fail('Invalid in-game player ID.');
+      return {id:id(p.id),name:name(p.name),governorId,duration:seconds(p.duration),petDuration:seconds(p.petDuration),group:p.group,on:bool(p.on),pet:bool(p.pet)};
     });
     return {groups,players,prep:seconds(value.prep)};
   }

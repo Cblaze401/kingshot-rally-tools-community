@@ -38,3 +38,12 @@ Anyone who hosts a copy must retain the visibly displayed creator credit **Origi
 In March Command, enter a preset name and choose **Save As** to save the current groups, player order, enabled selections, spacing, normal/pet march times, pet selections, and rally countdown. Choose a saved preset and press **Load** to switch setups, **Save** to update it, or **Delete** to remove it. Loading stops an active countdown; copy the schedule for fresh UTC rally call times.
 
 Presets are stored in this browser. **Export all** downloads a JSON backup to share or move to another device. **Import** adds presets without overwriting existing names. Loading a preset restores its pet selections; reopening March Command still starts Grizzly Bear OFF. Keep a backup before clearing browser data.
+
+
+## Rally caller map (Netlify)
+
+Enter each selected caller's in-game Player ID in March Command, then use **Refresh locations & march times**. The map uses Mightpulse coordinates and automatically targets the castle in each caller's reported kingdom. The view selector switches between kingdoms without changing rally groups. Estimates use the March Planner castle engine, base speed 11, +25% normal and +55% with Grizzly Bear, and whole-second client rounding. Check estimates against the game before calling rallies. Refresh updates both march inputs but preserves the pet toggle; manual inputs remain editable.
+
+Add `MIGHTPULSE_API_KEY` as a secret **Production** environment variable in Netlify, available to Functions, then deploy. Never put the key in repository files, browser scripts, or preset exports. Community hosts must use their own key. The Netlify function lives in `netlify/functions/`; other static hosts need an equivalent server endpoint to support lookup. Basic planning still works without it.
+
+Lookups request data no older than 60 seconds, but the provider may return stale or pending data. Only valid fresh coordinates and known kingdoms update march times. Data age is shown at lookup. Player IDs are included in saved presets and backups. Function requests use the site's Mightpulse allowance; the browser refreshes only when asked.
