@@ -16,13 +16,22 @@
     kingdom.innerHTML = kingdoms.length ? kingdoms.map(k=>`<option value="${k}">Kingdom ${k}</option>`).join('') : '<option value="">Refresh to find kingdoms</option>';
     kingdom.value = kingdoms.includes(Number(previous)) ? previous : String(kingdoms[0]||'');
     const shown = players.map(p => ({p,location:positions.get(p.governorId)})).filter(({location:l}) => l && l.kingdom === Number(kingdom.value) && Number.isInteger(l.x) && Number.isInteger(l.y));
-    const points = [[600,600],[552,552],[648,648],...shown.map(({location:l})=>[l.x+1,l.y+1])];
-    let xmin=Math.min(...points.map(p=>p[0]))-20, ymin=Math.min(...points.map(p=>p[1]))-20;
-    const size=Math.max(140,Math.max(...points.map(p=>p[0]))-xmin+20,Math.max(...points.map(p=>p[1]))-ymin+20);
-    const x=v=>30+(v-xmin)/size*540, y=v=>570-(v-ymin)/size*540;
-    let svg=`<rect x="${x(552)}" y="${y(648)}" width="${96/size*540}" height="${96/size*540}" fill="#3c344d" opacity=".55"/><text x="${x(552)}" y="${y(648)-6}" fill="#c8b6df" font-size="12">Ruins</text>`;
-    for(const {p,location:l} of shown){const sx=x(l.x+1),sy=y(l.y+1);svg+=`<line x1="${sx}" y1="${sy}" x2="${x(600)}" y2="${y(600)}" stroke="${l.fresh?'#65e3bf':'#aebdcc'}" stroke-dasharray="5 5" opacity=".6"/><circle cx="${sx}" cy="${sy}" r="5" fill="${l.fresh?'#65e3bf':'#aebdcc'}"><title>${esc(p.name)}: ${l.x}, ${l.y}</title></circle><text x="${sx+8}" y="${sy-7}" font-size="13" fill="#e6edf4">${esc(p.name)}</text>`;}
-    svg+=`<rect x="${x(600)-6}" y="${y(600)-6}" width="12" height="12" fill="#ffd77b"/><text x="${x(600)+10}" y="${y(600)+18}" font-size="14" fill="#ffd77b">King's Castle</text><text x="12" y="22" fill="#9aabba" font-size="12">K${esc(kingdom.value||'?')} · north ↑ · east →</text>`;
+    // Rotate world coordinates so North (+x,+y) is straight up on screen.
+    const project=(a,b)=>[(a-b)/Math.SQRT2,-(a+b-1200)/Math.SQRT2];
+    const corners=[[552,552],[552,648],[648,648],[648,552]];
+    const points=[...corners,[600,600],...shown.map(({location:l})=>[l.x+1,l.y+1])].map(p=>project(...p));
+    const minX=Math.min(...points.map(p=>p[0])),maxX=Math.max(...points.map(p=>p[0]));
+    const minY=Math.min(...points.map(p=>p[1])),maxY=Math.max(...points.map(p=>p[1]));
+    const size=Math.max(140,maxX-minX+40,maxY-minY+40),cx=(minX+maxX)/2,cy=(minY+maxY)/2;
+    const screen=(a,b)=>{const [u,v]=project(a,b);return [300+(u-cx)/size*520,300+(v-cy)/size*520]};
+    const [castleX,castleY]=screen(600,600);
+    let svg=`<polygon points="${corners.map(p=>screen(...p).join(',')).join(' ')}" fill="#3c344d" opacity=".55"/><line x1="${castleX}" y1="40" x2="${castleX}" y2="560" stroke="#344555" stroke-dasharray="3 6"/><line x1="40" y1="${castleY}" x2="560" y2="${castleY}" stroke="#344555" stroke-dasharray="3 6"/>`;
+    for(const {p,location:l} of shown){const [sx,sy]=screen(l.x+1,l.y+1);svg+=`<line x1="${sx}" y1="${sy}" x2="${castleX}" y2="${castleY}" stroke="${l.fresh?'#65e3bf':'#aebdcc'}" stroke-dasharray="5 5" opacity=".6"/><circle cx="${sx}" cy="${sy}" r="5" fill="${l.fresh?'#65e3bf':'#aebdcc'}"><title>${esc(p.name)}: ${l.x}, ${l.y}</title></circle><text x="${sx+8}" y="${sy-7}" font-size="13" fill="#e6edf4">${esc(p.name)}</text>`;}
+    for(const [key,label,dx,dy] of [['north','N',0,-10],['east','E',12,4],['south','S',0,16],['west','W',-14,4]]){
+      const turret=MarchCalculation.PRESETS[key], [tx,ty]=screen(...turret.center);
+      svg+=`<circle cx="${tx}" cy="${ty}" r="3" fill="#a6caff"><title>${turret.name}</title></circle><text text-anchor="middle" x="${tx+dx}" y="${ty+dy}" font-size="12" fill="#a6caff">${label}</text>`;
+    }
+    svg+=`<rect x="${castleX-5}" y="${castleY-5}" width="10" height="10" fill="#ffd77b"><title>King's Castle</title></rect><text x="12" y="22" fill="#9aabba" font-size="12">K${esc(kingdom.value||'?')} · north ↑ · east →</text><text x="12" y="586" fill="#ffd77b" font-size="12">Gold: King's Castle · Blue: N / E / S / W turrets</text>`;
     $('caller-map-svg').innerHTML=svg;
     $('map-results').innerHTML=players.map(p=>{const l=positions.get(p.governorId);return `<tr><td>${esc(p.name)}<small>${esc(p.governorId||'No Player ID')}</small></td><td>${l&&Number.isInteger(l.x)&&Number.isInteger(l.y)?`K${esc(l.kingdom)} · ${l.x}, ${l.y}`:'—'}</td><td>${l?.times?l.times.normal+'s / '+l.times.pet+'s':'—'}</td><td>${esc(l?.message||(validId(p.governorId)?'Not refreshed':'Enter Player ID'))}${typeof l?.ageSeconds==='number'?'<small>Age at lookup: '+Math.ceil(l.ageSeconds)+'s</small>':''}${l?.cachedAt?'<small>Source: '+esc(l.cachedAt)+'</small>':''}</td></tr>`}).join('');
   }
