@@ -159,7 +159,7 @@ input,select,textarea,.button,.icon-button{border-color:var(--control-line)}inpu
   <main id="main">
     <div class="intro"><div class="intro-copy"><div class="eyebrow">PLAN YOUR BATTLE FORMATION</div><h1>Build your battle map<span>.</span></h1><p>Place cities, save formations, refresh locations and export march times.</p></div><span class="world-tag">Normal world</span></div>
     <div class="workspace">
-      <aside class="controls" aria-label="Your TC position">
+      <aside class="controls" aria-label="Calculation inputs" hidden>
         <section class="control-section march-choice"><h2>March setup</h2><div class="choice-fields"><div class="field"><label for="march-action">March type</label><select id="march-action" aria-describedby="march-help"></select></div><div class="field"><label for="march-target" id="march-target-label">Target</label><select id="march-target" aria-describedby="march-help"></select></div></div><p id="march-help" class="hint"></p>
           <div id="auto-fields" class="conditional-fields" hidden><label class="check-label"><input id="auto-hunt" type="checkbox">Automatic hunting</label><p class="hint">Time to this target. Auto-hunt chooses targets as it runs.</p></div>
           <div id="boss-fields" class="conditional-fields" hidden><div class="field"><label for="boss-activity">Activity travel limit</label><select id="boss-activity" aria-describedby="boss-help"><option value="">No limit applied</option><option value="2940001">30-second activity cap</option></select></div><p id="boss-help" class="hint">Choose the travel limit for your world boss event.</p></div>
@@ -199,14 +199,14 @@ input,select,textarea,.button,.icon-button{border-color:var(--control-line)}inpu
   <div class="map-heading"><div><div class="eyebrow">ROUTE PLANNER</div><h3 id="map-title">Battle map</h3></div><button id="map-collapse" type="button" aria-expanded="true" aria-controls="map-content">Collapse −</button></div>
   <div id="map-content">
     <div class="map-toolbar">
-      <div class="map-modes" role="group" aria-label="Map action"><button type="button" data-map-mode="town" aria-pressed="true">Place TC</button><button type="button" data-map-mode="custom" aria-pressed="false">Place target</button><button type="button" data-map-mode="pan" aria-pressed="false">Pan</button></div>
+      <div class="map-modes" role="group" aria-label="Map action"><button type="button" data-map-mode="town" aria-pressed="false" hidden>Place city</button><button type="button" id="builder-place-city">Place city</button><button type="button" data-map-mode="custom" aria-pressed="false">Place target</button><button type="button" data-map-mode="pan" aria-pressed="false">Pan</button></div>
       <div class="map-tools">
         <div class="map-rotation" role="group" aria-label="Map rotation"><button id="map-rotate-left" type="button" aria-label="Rotate map counterclockwise by 45 degrees" title="Rotate 45° counterclockwise">↶</button><button id="map-reset-rotation" type="button" aria-label="Reset map rotation to zero degrees" aria-describedby="map-angle" title="Reset rotation to 0°"><span id="map-angle">0°</span></button><button id="map-rotate-right" type="button" aria-label="Rotate map clockwise by 45 degrees" title="Rotate 45° clockwise">↷</button></div>
         <div class="map-zoom" role="group" aria-label="Map zoom"><button id="map-zoom-out" type="button" aria-label="Zoom out">−</button><button id="map-zoom-in" type="button" aria-label="Zoom in">+</button></div>
       </div>
     </div>
-    <div class="map-visibility" role="group" aria-label="Map layers" style="display:flex;gap:20px;flex-wrap:wrap;margin:12px 0"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input id="map-show-town" type="checkbox" checked style="width:20px;min-height:20px">Your TC</label><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input id="map-show-planning" type="checkbox" checked style="width:20px;min-height:20px">Planning</label></div>
-    <p id="map-help" class="map-help">Tap to place your TC, or drag its four tiles to move it.</p>
+    <div class="map-visibility" role="group" aria-label="Map layers" style="display:flex;gap:20px;flex-wrap:wrap;margin:12px 0"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input id="map-show-planning" type="checkbox" checked style="width:20px;min-height:20px">Planning</label></div>
+    <p id="map-help" class="map-help">Use Place city to choose a position, or Pan to move the map.</p>
     <div class="map-viewport">
       <svg id="march-map-svg" viewBox="0 0 800 500" tabindex="0" role="group" aria-label="Interactive battle map" aria-describedby="map-help map-keyboard-help">
         <title>Castle, turrets, your TC, and destination</title>
@@ -227,9 +227,9 @@ input,select,textarea,.button,.icon-button{border-color:var(--control-line)}inpu
       <div class="map-zone-legend" aria-label="Map zones"><span><i class="zone-badlands"></i>Badlands</span><span><i class="zone-plains"></i>Plains</span><span><i class="zone-fertile"></i>Fertile Land</span><span><i class="zone-ruin"></i>Ruin</span><span><i class="zone-alert"></i>Alert zone</span><span><i class="zone-core"></i>Core · no TCs</span></div>
       <p>The amber shading and dashed border mark 0.5× terrain speed. Outside that border the factor is 1×, with no gradual slowdown. Dashed route sections use the same amber color.</p>
       <p>Thin outlines mark the live tracker's zones. The Ruin zone outline extends one tile beyond the slow-terrain border on its north and east sides. Alert and Core mark separate areas; they do not add another slowdown.</p>
-      <p>Your TC covers four tiles in a 2 × 2 square. All four tiles must stay outside the hatched castle core. Other live obstacles and temporary Alert-zone restrictions are not shown.</p>
+      <p>Planning markers are single squares. Actual cities occupy 2 × 2 tiles and must stay outside the hatched castle core. Other live obstacles and temporary Alert-zone restrictions are not shown.</p>
       <p>Drag your TC or target to move it. Select a destination to see its route. Use Pan to move the map, the curved arrows to rotate by 45°, and Fit points to bring every destination into view.</p>
-      <p>Map positions mark movement centers. TC fields use the visible lower corner; its center is one tile higher on both axes. Target fields follow the chosen coordinate reference.</p>
+      <p>City roster coordinates use the visible lower corner. Movement centers are one tile higher on both axes.</p>
       <p id="map-keyboard-help">Keyboard: arrow keys move the map cursor; Enter places the point. On a movable footprint, arrows move that point. Hold Shift for ten-tile steps. Escape cancels a drag. Coordinate fields also work without dragging.</p>
     </div></details>
     <p id="map-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
@@ -561,7 +561,8 @@ globalThis.MarchTypes = MarchTypes;
   let rotation = 315, rotationKey, collapsed = false, collapseKey;
   let invalidPlacement = null, cursorKind = 'town';
   let rosterCities = [];
-  let showTown = true, showPlanning = true;
+  const showTown = false;
+  let showPlanning = true;
   const visibilityKey = 'kingshot.planner.map-visibility.v1';
   function drawCities() {
     let layer = svg.querySelector('#roster-map-layer');
@@ -847,7 +848,7 @@ globalThis.MarchTypes = MarchTypes;
     $('map-selection').textContent = selected ? `Selected route: ${selected.name}${point(selected.to) ? `, center ${coords(selected.to)}` : ''}. ${summary(state.selectedTarget)}` : 'Choose a destination to inspect its route.';
   }
   function updateHint() {
-    $('map-help').textContent = mode === 'pan' ? 'Drag to move the view. Your coordinates stay fixed.' : mode === 'custom' ? `Tap to place ${name('custom').toLowerCase()}, or drag its footprint.` : 'Tap to place your TC, or drag its four tiles to move it.';
+    $('map-help').textContent = mode === 'pan' ? 'Drag to move the view. Your coordinates stay fixed.' : mode === 'custom' ? `Tap to place ${name('custom').toLowerCase()}, or drag its footprint.` : 'Tap to choose a city position, then save it in the city roster.';
   }
   function paint() {
     if (!initialized || collapsed) return;
@@ -916,7 +917,7 @@ globalThis.MarchTypes = MarchTypes;
     view = { x: center[0], y: center[1], scale: Math.min(20, (WIDTH - 150 * unit) / Math.max(1, maxA - minA), (HEIGHT - 130 * unit) / Math.max(1, maxB - minB)) };
     cursor = null; paint();
     const omitted = [state.from, ...activeKeys().map(key => state.destinations[key]?.to)].some(p => point(p) && !supported(p));
-    announce(omitted ? 'Fitted supported points. Some coordinates are outside the map range; their values are unchanged.' : 'Fitted the town and all valid destinations.');
+    announce(omitted ? 'Fitted supported points. Some coordinates are outside the map range; their values are unchanged.' : 'Fitted planning cities and all valid destinations.');
   }
   function commit(kind, center, snap = true) {
     if (!active(kind)) return false;
@@ -1077,11 +1078,10 @@ globalThis.MarchTypes = MarchTypes;
       const stored = localStorage.getItem(rotationKey);
       if (stored !== null && /^(0|45|90|135|180|225|270|315)$/.test(stored)) rotation = Number(stored);
     } catch (_) { /* Use the unrotated top-down view when storage is blocked. */ }
-    try { const saved=JSON.parse(localStorage.getItem(visibilityKey)||'null'); if(saved){showTown=saved.town!==false;showPlanning=saved.planning!==false;} } catch (_) {}
-    $('map-show-town').checked=showTown;
+    try { const saved=JSON.parse(localStorage.getItem(visibilityKey)||'null'); if(saved){showPlanning=saved.planning!==false;} } catch (_) {}
     $('map-show-planning').checked=showPlanning;
-    for(const id of ['map-show-town','map-show-planning']) $(id).addEventListener('change',()=>{
-      showTown=$('map-show-town').checked;showPlanning=$('map-show-planning').checked;
+    for(const id of ['map-show-planning']) $(id).addEventListener('change',()=>{
+      showPlanning=$('map-show-planning').checked;
       try { localStorage.setItem(visibilityKey,JSON.stringify({town:showTown,planning:showPlanning})); } catch (_) {}
       paint();announce('Map visibility updated. Saved cities and march times are unchanged.');
     });
@@ -1127,7 +1127,8 @@ globalThis.MarchTypes = MarchTypes;
     $('map-rotate-right')?.addEventListener('click', () => setRotation(rotation + 45));
     $('map-reset-rotation')?.addEventListener('click', () => setRotation(0));
     $('map-collapse').addEventListener('click',()=>setCollapsed(!collapsed));
-    initialized = true; setMode('town'); setCollapsed(collapsed,false); paint();
+    $('builder-place-city').addEventListener('click',()=>document.getElementById('city-place')?.click());
+    initialized = true; setMode('pan'); setCollapsed(collapsed,false); paint();
     if (typeof ResizeObserver === 'function') {
       resizeObserver = new ResizeObserver(() => { if (Math.abs(svg.getBoundingClientRect().width - lastWidth) > .5) paint(); });
       resizeObserver.observe(svg);
@@ -1499,7 +1500,12 @@ globalThis.MarchTypes = MarchTypes;
   });
   MarchMap.init({
     onPlace(kind, center) {
-      if (kind === 'town' && window.CityRoster?.placing()) return window.CityRoster.place(center);
+      if (kind === 'town') {
+        if (!window.CityRoster?.placing()) return false;
+        const result=window.CityRoster.place(center);
+        if(result)document.querySelector('[data-map-mode="pan"]').click();
+        return result;
+      }
       const prefix = kind === 'town' ? 'town' : customPrefix();
       const object = kind === 'town' ? catalog.targets.town : customObject();
       if (object.key === 'town') {
